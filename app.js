@@ -23,7 +23,7 @@ app.use(express.urlencoded({ extended: true }));
 // Rutas
 app.use('/api/personajes', personajeRoutes);
 app.use('/api/batallas', batallaRoutes);
-app.use('/api/batallas', batalla3vs3Routes); // 👈 cambio aquí (antes tenía /3vs3)
+app.use('/api/batallas/3vs3', batalla3vs3Routes);
 
 // Swagger
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(specs));

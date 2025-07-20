@@ -43,7 +43,7 @@ const {
  *       400:
  *         description: Error de validación
  */
-router.post('/3vs3/crear', crearBatalla3vs3);
+router.post('/crear', crearBatalla3vs3);
 
 /**
  * @swagger
@@ -90,11 +90,11 @@ router.post('/3vs3/crear', crearBatalla3vs3);
  *       404:
  *         description: Batalla no encontrada
  */
-router.put('/3vs3/:id/ordenar', configurarOrdenRondas);
+router.put('/:id/ordenar', configurarOrdenRondas);
 
 /**
  * @swagger
- * /api/batallas/round1/{batallaId}:
+ * /api/batallas/3vs3/round1/{batallaId}:
  *   post:
  *     summary: Ejecuta la ronda 1 de una batalla 3vs3
  *     tags:
@@ -119,7 +119,7 @@ router.post('/round1/:batallaId', (req, res) => {
 
 /**
  * @swagger
- * /api/batallas/round2/{batallaId}:
+ * /api/batallas/3vs3/round2/{batallaId}:
  *   post:
  *     summary: Ejecuta la ronda 2 de una batalla 3vs3
  *     tags:
@@ -144,7 +144,7 @@ router.post('/round2/:batallaId', (req, res) => {
 
 /**
  * @swagger
- * /api/batallas/round3/{batallaId}:
+ * /api/batallas/3vs3/round3/{batallaId}:
  *   post:
  *     summary: Ejecuta la ronda 3 de una batalla 3vs3
  *     tags:
@@ -169,7 +169,7 @@ router.post('/round3/:batallaId', (req, res) => {
 
 /**
  * @swagger
- * /api/batallas/resumen:
+ * /api/batallas/3vs3/resumen:
  *   get:
  *     summary: Obtiene un resumen de todas las batallas 3vs3
  *     tags:
