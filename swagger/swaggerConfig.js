@@ -1,6 +1,9 @@
 const swaggerJsdoc = require('swagger-jsdoc');
 const path = require('path');
 
+// Importar explícitamente la documentación de autenticación
+require('./authDoc');
+
 const options = {
   definition: {
     openapi: '3.0.0',
@@ -34,6 +37,7 @@ const options = {
     path.join(__dirname, '../routes/*.js'),
     path.join(__dirname, '../models/*.js'),
     path.join(__dirname, './*.js'),
+    path.join(__dirname, './*.js'), // Asegura que swagger/*.js esté cubierto
   ],
 };
 
