@@ -10,7 +10,7 @@ const options = {
     },
     servers: [
       {
-        url: process.env.BASE_URL || 'http://localhost:3000',
+        url: process.env.BASE_URL || 'https://apipelea.onrender.com',
         description: 'Servidor dinámico: producción (Render) o desarrollo (localhost)',
       },
     ],
