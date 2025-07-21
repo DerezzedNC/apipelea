@@ -1,6 +1,8 @@
 const express = require('express');
 const router = express.Router();
 const { crearOBatallar, resumenBatallas } = require('../controllers/batallaController');
+const authMiddleware = require('../middlewares/authMiddleware');
+const verificarRol = require('../middlewares/verificarRol');
 
 /**
  * @swagger
@@ -9,6 +11,8 @@ const { crearOBatallar, resumenBatallas } = require('../controllers/batallaContr
  *     summary: Crea una nueva batalla 1vs1
  *     tags:
  *       - Batallas 1vs1
+ *     security:
+ *       - bearerAuth: []
  *     requestBody:
  *       required: true
  *       content:
@@ -33,8 +37,12 @@ const { crearOBatallar, resumenBatallas } = require('../controllers/batallaContr
  *         description: Batalla creada exitosamente
  *       400:
  *         description: Error de validación
+ *       401:
+ *         description: Token requerido
+ *       403:
+ *         description: Token inválido
  */
-router.post('/1vs1', crearOBatallar);
+router.post('/1vs1', authMiddleware, verificarRol(['admin', 'usuario']), crearOBatallar);
 
 /**
  * @swagger
@@ -43,10 +51,16 @@ router.post('/1vs1', crearOBatallar);
  *     summary: Obtiene un resumen de todas las batallas 1vs1
  *     tags:
  *       - Batallas 1vs1
+ *     security:
+ *       - bearerAuth: []
  *     responses:
  *       200:
  *         description: Lista de batallas con su estado actual
+ *       401:
+ *         description: Token requerido
+ *       403:
+ *         description: Token inválido
  */
-router.get('/', resumenBatallas);
+router.get('/', authMiddleware, verificarRol(['admin', 'usuario']), resumenBatallas);
 
 module.exports = router;

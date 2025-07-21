@@ -6,7 +6,7 @@ const options = {
     info: {
       title: 'API de Batallas',
       version: '1.0.0',
-      description: 'API para gestionar personajes y batallas',
+      description: 'API para gestionar personajes y batallas con autenticación JWT',
     },
     servers: [
       {
@@ -14,8 +14,18 @@ const options = {
         description: 'Servidor de desarrollo',
       },
     ],
+    components: {
+      securitySchemes: {
+        bearerAuth: {
+          type: 'http',
+          scheme: 'bearer',
+          bearerFormat: 'JWT',
+        },
+      },
+    },
   },
   apis: [
+    './swagger/authDoc.js',
     './routes/*.js',
     './models/*.js', 
     './swagger/*.js'

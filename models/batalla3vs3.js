@@ -53,7 +53,12 @@ const batalla3vs3Schema = new mongoose.Schema({
   finalizada: { type: Boolean, default: false },
   victoriasTeamA: { type: Number, default: 0 },
   victoriasTeamB: { type: Number, default: 0 },
-  ganadorEquipo: String
+  ganadorEquipo: String,
+  userId: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'User',
+    required: true
+  }
 }, { timestamps: true });
 
 module.exports = mongoose.model('Batalla3vs3', batalla3vs3Schema);

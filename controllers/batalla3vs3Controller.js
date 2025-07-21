@@ -9,7 +9,11 @@ const crearBatalla3vs3 = async (req, res) => {
     if (!Array.isArray(teamA) || teamA.length !== 3 || !Array.isArray(teamB) || teamB.length !== 3) {
       return res.status(400).json({ mensaje: 'Debes proporcionar exactamente 3 IDs para teamA y teamB' });
     }
-    const batalla = new Batalla3vs3({ teamA, teamB });
+    const batalla = new Batalla3vs3({ 
+      teamA, 
+      teamB,
+      userId: req.user.id
+    });
     await batalla.save();
     res.status(201).json({ mensaje: 'Batalla creada exitosamente', id: batalla._id });
   } catch (error) {
@@ -189,7 +193,14 @@ const ejecutarRonda = async (req, res) => {
 // GET /api/batallas/3vs3/resumen
 const obtenerResumen = async (req, res) => {
   try {
-    const batallas = await Batalla3vs3.find().sort({ createdAt: -1 });
+    let query = {};
+    
+    // Si es usuario normal, solo ver sus batallas
+    if (req.user.rol === 'usuario') {
+      query.userId = req.user.id;
+    }
+    
+    const batallas = await Batalla3vs3.find(query).sort({ createdAt: -1 });
     const resumen = batallas.map(b => ({
       _id: b._id,
       teamA: b.teamA,

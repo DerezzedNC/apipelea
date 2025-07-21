@@ -26,6 +26,11 @@ const personajeSchema = new mongoose.Schema({
     required: true,
     min: 0,
     max: 100
+  },
+  userId: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'User',
+    required: true
   }
 }, {
   timestamps: true

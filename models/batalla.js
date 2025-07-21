@@ -96,6 +96,11 @@ const batallaSchema = new mongoose.Schema({
   finalizada: {
     type: Boolean,
     default: false
+  },
+  userId: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'User',
+    required: true
   }
 }, {
   timestamps: true

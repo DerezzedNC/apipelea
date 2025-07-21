@@ -6,6 +6,8 @@ const {
   ejecutarRonda,
   obtenerResumen
 } = require('../controllers/batalla3vs3Controller');
+const authMiddleware = require('../middlewares/authMiddleware');
+const verificarRol = require('../middlewares/verificarRol');
 
 /**
  * @swagger
@@ -14,6 +16,8 @@ const {
  *     summary: Crea una nueva batalla 3vs3
  *     tags:
  *       - Batallas 3vs3
+ *     security:
+ *       - bearerAuth: []
  *     requestBody:
  *       required: true
  *       content:
@@ -42,8 +46,12 @@ const {
  *         description: Batalla creada exitosamente
  *       400:
  *         description: Error de validación
+ *       401:
+ *         description: Token requerido
+ *       403:
+ *         description: Token inválido
  */
-router.post('/crear', crearBatalla3vs3);
+router.post('/crear', authMiddleware, verificarRol(['admin', 'usuario']), crearBatalla3vs3);
 
 /**
  * @swagger
@@ -90,7 +98,7 @@ router.post('/crear', crearBatalla3vs3);
  *       404:
  *         description: Batalla no encontrada
  */
-router.put('/:id/ordenar', configurarOrdenRondas);
+router.put('/:id/ordenar', authMiddleware, verificarRol(['admin', 'usuario']), configurarOrdenRondas);
 
 /**
  * @swagger
@@ -99,6 +107,8 @@ router.put('/:id/ordenar', configurarOrdenRondas);
  *     summary: Ejecuta la ronda 1 de una batalla 3vs3
  *     tags:
  *       - Batallas 3vs3
+ *     security:
+ *       - bearerAuth: []
  *     parameters:
  *       - in: path
  *         name: batallaId
@@ -111,8 +121,10 @@ router.put('/:id/ordenar', configurarOrdenRondas);
  *         description: Turno ejecutado o ronda finalizada
  *       400:
  *         description: Error de validación o ronda ya finalizada
+ *       401:
+ *         description: No autorizado
  */
-router.post('/round1/:batallaId', (req, res) => {
+router.post('/round1/:batallaId', authMiddleware, verificarRol(['admin', 'usuario']), (req, res) => {
   req.params.numeroRonda = 1;
   ejecutarRonda(req, res);
 });
@@ -124,6 +136,8 @@ router.post('/round1/:batallaId', (req, res) => {
  *     summary: Ejecuta la ronda 2 de una batalla 3vs3
  *     tags:
  *       - Batallas 3vs3
+ *     security:
+ *       - bearerAuth: []
  *     parameters:
  *       - in: path
  *         name: batallaId
@@ -136,8 +150,10 @@ router.post('/round1/:batallaId', (req, res) => {
  *         description: Turno ejecutado o ronda finalizada
  *       400:
  *         description: Error de validación o ronda ya finalizada
+ *       401:
+ *         description: No autorizado
  */
-router.post('/round2/:batallaId', (req, res) => {
+router.post('/round2/:batallaId', authMiddleware, verificarRol(['admin', 'usuario']), (req, res) => {
   req.params.numeroRonda = 2;
   ejecutarRonda(req, res);
 });
@@ -149,6 +165,8 @@ router.post('/round2/:batallaId', (req, res) => {
  *     summary: Ejecuta la ronda 3 de una batalla 3vs3
  *     tags:
  *       - Batallas 3vs3
+ *     security:
+ *       - bearerAuth: []
  *     parameters:
  *       - in: path
  *         name: batallaId
@@ -161,8 +179,10 @@ router.post('/round2/:batallaId', (req, res) => {
  *         description: Turno ejecutado o ronda finalizada
  *       400:
  *         description: Error de validación o ronda ya finalizada
+ *       401:
+ *         description: No autorizado
  */
-router.post('/round3/:batallaId', (req, res) => {
+router.post('/round3/:batallaId', authMiddleware, verificarRol(['admin', 'usuario']), (req, res) => {
   req.params.numeroRonda = 3;
   ejecutarRonda(req, res);
 });
@@ -174,10 +194,14 @@ router.post('/round3/:batallaId', (req, res) => {
  *     summary: Obtiene un resumen de todas las batallas 3vs3
  *     tags:
  *       - Batallas 3vs3
+ *     security:
+ *       - bearerAuth: []
  *     responses:
  *       200:
  *         description: Lista de batallas con su estado actual
+ *       401:
+ *         description: No autorizado
  */
-router.get('/resumen', obtenerResumen);
+router.get('/resumen', authMiddleware, verificarRol(['admin', 'usuario']), obtenerResumen);
 
 module.exports = router;

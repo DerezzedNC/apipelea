@@ -1,193 +1,152 @@
-# API de Batallas
+# API de Batallas con Autenticación JWT
 
-API REST para gestionar personajes y batallas usando Express, MongoDB y Swagger.
+API REST para gestionar personajes y batallas con sistema de autenticación JWT y control de roles.
 
 ## Características
 
-- ✅ CRUD completo de personajes
-- ✅ Sistema de batallas 1vs1 por turnos
-- ✅ Sistema de batallas 3vs3 por equipos
-- ✅ Validaciones robustas de datos
-- ✅ Documentación Swagger interactiva
-- ✅ Manejo de errores mejorado
-- ✅ Validación de ObjectId
-- ✅ Estructura escalable para futuras funcionalidades
+- ✅ Autenticación JWT
+- ✅ Sistema de roles (admin/usuario)
+- ✅ Control de acceso basado en roles
+- ✅ Filtrado de datos por usuario
+- ✅ Batallas 1vs1 y 3vs3
+- ✅ Documentación Swagger
+- ✅ MongoDB con Mongoose
 
 ## Instalación
 
-1. Instalar dependencias:
+1. Clonar el repositorio
+2. Instalar dependencias:
 ```bash
 npm install
 ```
 
-2. Crear archivo `.env` en la raíz del proyecto:
-```
-# Para MongoDB Atlas:
-MONGODB_URI=mongodb+srv://usuario:password@cluster.mongodb.net/apibatallas?retryWrites=true&w=majority
-
-# Para MongoDB local:
-# MONGODB_URI=mongodb://localhost:27017/apibatallas
-
+3. Crear archivo `.env` con las siguientes variables:
+```env
+MONGODB_URI=mongodb://localhost:27017/batallas
 PORT=3000
+JWT_SECRET=tu_jwt_secret_super_seguro_aqui
 ```
 
-3. **Para MongoDB Atlas**: Reemplaza `usuario`, `password` y `cluster.mongodb.net` con tus credenciales reales
-4. **Para MongoDB local**: Asegúrate de tener MongoDB corriendo localmente
-
-## Uso
-
-### Desarrollo
-```bash
-npm run dev
-```
-
-### Producción
+4. Iniciar el servidor:
 ```bash
 npm start
 ```
 
-## Endpoints
+## Autenticación
+
+### Registro
+```bash
+POST /api/auth/register
+{
+  "nombre": "usuario1",
+  "password": "123456"
+}
+
+# Respuesta:
+{
+  "mensaje": "Usuario registrado correctamente"
+}
+```
+
+### Login
+```bash
+POST /api/auth/login
+{
+  "nombre": "usuario1",
+  "password": "123456"
+}
+
+# Respuesta:
+{
+  "mensaje": "Login exitoso",
+  "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...",
+  "user": {
+    "id": "507f1f77bcf86cd799439011",
+    "nombre": "usuario1",
+    "rol": "usuario"
+  }
+}
+```
+
+## Roles y Permisos
+
+### Usuario Normal (`rol: "usuario"`)
+- ✅ Hacer login
+- ✅ Ver personajes existentes
+- ✅ Crear batallas 1vs1 y 3vs3
+- ✅ Ejecutar turnos de batallas
+- ✅ Ver solo sus propias batallas
+
+### Administrador (`rol: "admin"`)
+- ✅ Todas las funciones de usuario normal
+- ✅ Crear, editar y eliminar personajes
+- ✅ Ver todas las batallas de todos los usuarios
+- ✅ Acceso a resúmenes globales
+
+## Endpoints Principales
+
+### Autenticación
+- `POST /api/auth/register` - Registro de usuario
+- `POST /api/auth/login` - Login de usuario
+- `GET /api/auth/me` - Obtener perfil (requiere token)
 
 ### Personajes
-- `GET /` - Verificar estado de la API
-- `GET /api-docs` - Documentación Swagger interactiva
-- `POST /api/personajes` - Crear personaje
-- `GET /api/personajes` - Obtener todos los personajes
-- `GET /api/personajes/:id` - Obtener personaje por ID
-- `PUT /api/personajes/:id` - Actualizar personaje
-- `DELETE /api/personajes/:id` - Eliminar personaje
+- `GET /api/personajes` - Ver todos los personajes
+- `GET /api/personajes/:id` - Ver personaje específico
+- `POST /api/personajes` - Crear personaje (solo admin)
+- `PUT /api/personajes/:id` - Editar personaje (solo admin)
+- `DELETE /api/personajes/:id` - Eliminar personaje (solo admin)
 
-### Batallas
-- `POST /api/batallas/1vs1` - Crear batalla o ejecutar turno
-- `GET /api/batallas` - Obtener resumen de todas las batallas
+### Batallas 1vs1
+- `POST /api/batallas/1vs1` - Crear batalla 1vs1
+- `GET /api/batallas` - Ver resumen de batallas
 
 ### Batallas 3vs3
 - `POST /api/batallas/3vs3/crear` - Crear batalla 3vs3
-- `POST /api/batallas/3vs3/orden` - Configurar orden de rondas
-- `POST /api/batallas/3vs3/round1/:batallaId` - Ejecutar turno ronda 1
-- `POST /api/batallas/3vs3/round2/:batallaId` - Ejecutar turno ronda 2
-- `POST /api/batallas/3vs3/round3/:batallaId` - Ejecutar turno ronda 3
-- `GET /api/batallas/3vs3/resumen` - Obtener resumen de batallas 3vs3
+- `PUT /api/batallas/3vs3/:id/ordenar` - Configurar orden de rondas
+- `POST /api/batallas/3vs3/round1/:batallaId` - Ejecutar ronda 1
+- `POST /api/batallas/3vs3/round2/:batallaId` - Ejecutar ronda 2
+- `POST /api/batallas/3vs3/round3/:batallaId` - Ejecutar ronda 3
+- `GET /api/batallas/3vs3/resumen` - Ver resumen de batallas 3vs3
 
-## Estructura del Personaje
+## Uso del Token
 
-```json
-{
-  "nombre": "string (2-50 caracteres, solo letras y espacios)",
-  "vida": "number (1-1000)",
-  "ataque": "number (1-200)",
-  "escudo": "number (0-100)"
-}
+Para endpoints protegidos, incluir el token en el header:
+```
+Authorization: Bearer <tu_token_jwt>
 ```
 
-## Validaciones
+## Documentación Swagger
 
-- **Nombre**: Solo letras y espacios, entre 2-50 caracteres
-- **Vida**: Entre 1-1000 puntos
-- **Ataque**: Entre 1-200 puntos
-- **Escudo**: Entre 0-100 puntos
-- **ID**: Validación de ObjectId para operaciones por ID
-
-## Sistema de Batallas
-
-### Batallas 1vs1:
-1. **Crear batalla**: Envía los IDs de dos personajes para crear una nueva batalla
-2. **Ejecutar turnos**: La misma ruta ejecuta turnos alternados (personajeA → personajeB → personajeA...)
-3. **Mecánica de daño**: El daño se aplica primero al escudo, luego a la vida
-4. **Finalización**: La batalla termina cuando la vida de un personaje llega a 0
-
-### Batallas 3vs3:
-1. **Crear batalla**: Envía los datos completos de 6 personajes (3 para cada equipo) y la configuración de rondas
-2. **Ejecutar rondas**: Cada ronda se ejecuta por separado con turnos alternados
-3. **Determinar ganador**: El equipo con más victorias gana la batalla
-
-### Ejemplos de uso:
-
-#### Batalla 1vs1:
-```json
-POST /api/batallas/1vs1
-{
-  "personajeAId": "507f1f77bcf86cd799439011",
-  "personajeBId": "507f1f77bcf86cd799439012"
-}
+Acceder a la documentación interactiva en:
+```
+http://localhost:3000/api-docs
 ```
 
-#### Batalla 3vs3:
-```json
-POST /api/batallas/3vs3/crear
-{
-  "teamA": [
-    {
-      "id": "id1",
-      "nombre": "Guerrero",
-      "vida": 100,
-      "escudo": 20,
-      "ataque": 30
-    },
-    {
-      "id": "id2", 
-      "nombre": "Mago",
-      "vida": 80,
-      "escudo": 10,
-      "ataque": 40
-    },
-    {
-      "id": "id3",
-      "nombre": "Arquero", 
-      "vida": 90,
-      "escudo": 15,
-      "ataque": 35
-    }
-  ],
-  "teamB": [
-    {
-      "id": "id4",
-      "nombre": "Paladín",
-      "vida": 120,
-      "escudo": 25,
-      "ataque": 25
-    },
-    {
-      "id": "id5",
-      "nombre": "Berserker",
-      "vida": 70,
-      "escudo": 5,
-      "ataque": 50
-    },
-    {
-      "id": "id6",
-      "nombre": "Monje",
-      "vida": 85,
-      "escudo": 30,
-      "ataque": 20
-    }
-  ],
-  "ordenRondas": [
-    {"a": 0, "b": 1},
-    {"a": 1, "b": 2},
-    {"a": 2, "b": 0}
-  ]
-}
+## Estructura del Proyecto
+
 ```
-
-## Próximas Funcionalidades
-
-- Daño degenerativo
-- Pruebas automatizadas
-- Frontend visual para interacción
-
-## Solución de Problemas
-
-### Error de Conexión a MongoDB
-- **ECONNREFUSED**: Verifica que MongoDB esté corriendo
-- **Authentication failed**: Verifica las credenciales en tu archivo `.env`
-- **ENOTFOUND**: Verifica la URL de conexión en tu archivo `.env`
-
-### Formato de URI de MongoDB Atlas
+├── app.js                 # Archivo principal
+├── config/
+│   └── db.js             # Configuración de MongoDB
+├── controllers/
+│   ├── authController.js  # Controlador de autenticación
+│   ├── personajeController.js
+│   ├── batallaController.js
+│   └── batalla3vs3Controller.js
+├── middlewares/
+│   ├── verificarToken.js  # Middleware de autenticación
+│   └── verificarRol.js    # Middleware de roles
+├── models/
+│   ├── User.js           # Modelo de usuario
+│   ├── personaje.js
+│   ├── batalla.js
+│   └── batalla3vs3.js
+├── routes/
+│   ├── authRoutes.js     # Rutas de autenticación
+│   ├── personajeRoutes.js
+│   ├── batallaRoutes.js
+│   └── batalla3vs3Routes.js
+└── swagger/
+    └── swaggerConfig.js  # Configuración de Swagger
 ```
-mongodb+srv://usuario:password@cluster.mongodb.net/nombre-db?retryWrites=true&w=majority
-```
-
-### Variables de Entorno Requeridas
-- `MONGODB_URI`: URI de conexión a MongoDB
-- `PORT`: Puerto del servidor (opcional, por defecto 3000)

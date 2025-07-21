@@ -5,6 +5,7 @@ require('dotenv').config();
 
 const conectarDB = require('./config/db');
 const specs = require('./swagger/swaggerConfig');
+const authRoutes = require('./routes/authRoutes');
 const personajeRoutes = require('./routes/personajeRoutes');
 const batallaRoutes = require('./routes/batallaRoutes');
 const batalla3vs3Routes = require('./routes/batalla3vs3Routes');
@@ -21,6 +22,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 // Rutas
+app.use('/api/auth', authRoutes);
 app.use('/api/personajes', personajeRoutes);
 app.use('/api/batallas', batallaRoutes);
 app.use('/api/batallas/3vs3', batalla3vs3Routes);

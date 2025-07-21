@@ -52,7 +52,8 @@ const crearOBatallar = async (req, res) => {
           ataque: pB.ataque
         },
         turnos: [],
-        finalizada: false
+        finalizada: false,
+        userId: req.user.id
       });
 
       await batalla.save();
@@ -134,7 +135,14 @@ const crearOBatallar = async (req, res) => {
 // GET /api/batallas
 const resumenBatallas = async (req, res) => {
   try {
-    const batallas = await Batalla.find().sort({ createdAt: -1 });
+    let query = {};
+    
+    // Si es usuario normal, solo ver sus batallas
+    if (req.user.rol === 'usuario') {
+      query.userId = req.user.id;
+    }
+    
+    const batallas = await Batalla.find(query).sort({ createdAt: -1 });
     const resumen = batallas.map(b => ({
       _id: b._id,
       personajeA: b.personajeA.nombre,

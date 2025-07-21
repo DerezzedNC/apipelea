@@ -4,7 +4,10 @@ const Personaje = require('../models/personaje');
 // Crear un nuevo personaje
 const crearPersonaje = async (req, res) => {
   try {
-    const personaje = new Personaje(req.body);
+    const personaje = new Personaje({
+      ...req.body,
+      userId: req.user.id
+    });
     const personajeGuardado = await personaje.save();
     res.status(201).json(personajeGuardado);
   } catch (error) {
