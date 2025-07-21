@@ -1,4 +1,5 @@
 const swaggerJsdoc = require('swagger-jsdoc');
+const path = require('path');
 
 const options = {
   definition: {
@@ -30,18 +31,17 @@ const options = {
     ],
   },
   apis: [
-    './routes/*.js',    // Define los endpoints
-    './models/*.js',    // Documentación de esquemas si usas JSDoc en modelos
-    './swagger/*.js',   // Archivos personalizados de Swagger como authDoc.js
+    path.join(__dirname, '../routes/*.js'),
+    path.join(__dirname, '../models/*.js'),
+    path.join(__dirname, './*.js'),
   ],
 };
 
 const specs = swaggerJsdoc(options);
 
 // Debug (opcional):
-console.log('📚 Swagger configurado con las siguientes rutas:');
-console.log('- ./routes/*.js');
-console.log('- ./models/*.js');
-console.log('- ./swagger/*.js');
+console.log('📚 Swagger configurado con las siguientes rutas absolutas:');
+console.log(options.apis);
+console.log('Swagger paths encontrados:', specs.paths ? Object.keys(specs.paths) : 'No hay paths');
 
 module.exports = specs;
