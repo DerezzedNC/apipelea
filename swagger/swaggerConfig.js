@@ -6,12 +6,12 @@ const options = {
     info: {
       title: 'API de Batallas',
       version: '1.0.0',
-      description: 'API para gestionar personajes y batallas con autenticación JWT',
+      description: 'API para gestionar personajes, batallas 1vs1 y 3vs3 con autenticación JWT',
     },
     servers: [
       {
-        url: 'http://localhost:3000',
-        description: 'Servidor de desarrollo',
+        url: process.env.BASE_URL || 'http://localhost:3000',
+        description: 'Servidor dinámico: producción (Render) o desarrollo (localhost)',
       },
     ],
     components: {
@@ -23,19 +23,23 @@ const options = {
         },
       },
     },
+    security: [
+      {
+        bearerAuth: [],
+      },
+    ],
   },
   apis: [
-    './swagger/authDoc.js',
-    './routes/*.js',
-    './models/*.js', 
-    './swagger/*.js'
+    './routes/*.js',    // Define los endpoints
+    './models/*.js',    // Documentación de esquemas si usas JSDoc en modelos
+    './swagger/*.js',   // Archivos personalizados de Swagger como authDoc.js
   ],
 };
 
 const specs = swaggerJsdoc(options);
 
-// Debug: Imprimir las rutas que se están procesando
-console.log('Swagger configurado con las siguientes rutas:');
+// Debug (opcional):
+console.log('📚 Swagger configurado con las siguientes rutas:');
 console.log('- ./routes/*.js');
 console.log('- ./models/*.js');
 console.log('- ./swagger/*.js');
