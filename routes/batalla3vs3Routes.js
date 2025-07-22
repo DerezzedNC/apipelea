@@ -14,8 +14,7 @@ const verificarRol = require('../middlewares/verificarRol');
  * /api/batallas/3vs3/crear:
  *   post:
  *     summary: Crea una nueva batalla 3vs3
- *     tags:
- *       - Batallas 3vs3
+ *     tags: [Batallas 3vs3]
  *     security:
  *       - bearerAuth: []
  *     requestBody:
@@ -58,8 +57,9 @@ router.post('/crear', authMiddleware, verificarRol(['admin', 'usuario']), crearB
  * /api/batallas/3vs3/{id}/ordenar:
  *   put:
  *     summary: Configura el orden de las rondas en una batalla 3vs3 existente
- *     tags:
- *       - Batallas 3vs3
+ *     tags: [Batallas 3vs3]
+ *     security:
+ *       - bearerAuth: []
  *     parameters:
  *       - in: path
  *         name: id
@@ -98,15 +98,17 @@ router.post('/crear', authMiddleware, verificarRol(['admin', 'usuario']), crearB
  *       404:
  *         description: Batalla no encontrada
  */
-router.put('/:id/ordenar', authMiddleware, verificarRol(['admin', 'usuario']), configurarOrdenRondas);
+router.put('/:id/ordenar', authMiddleware, verificarRol(['admin', 'usuario']), (req, res) => {
+  req.params.id = req.params.id;
+  configurarOrdenRondas(req, res);
+});
 
 /**
  * @swagger
  * /api/batallas/3vs3/round1/{batallaId}:
  *   post:
  *     summary: Ejecuta la ronda 1 de una batalla 3vs3
- *     tags:
- *       - Batallas 3vs3
+ *     tags: [Batallas 3vs3]
  *     security:
  *       - bearerAuth: []
  *     parameters:
@@ -134,8 +136,7 @@ router.post('/round1/:batallaId', authMiddleware, verificarRol(['admin', 'usuari
  * /api/batallas/3vs3/round2/{batallaId}:
  *   post:
  *     summary: Ejecuta la ronda 2 de una batalla 3vs3
- *     tags:
- *       - Batallas 3vs3
+ *     tags: [Batallas 3vs3]
  *     security:
  *       - bearerAuth: []
  *     parameters:
@@ -163,8 +164,7 @@ router.post('/round2/:batallaId', authMiddleware, verificarRol(['admin', 'usuari
  * /api/batallas/3vs3/round3/{batallaId}:
  *   post:
  *     summary: Ejecuta la ronda 3 de una batalla 3vs3
- *     tags:
- *       - Batallas 3vs3
+ *     tags: [Batallas 3vs3]
  *     security:
  *       - bearerAuth: []
  *     parameters:
@@ -192,8 +192,7 @@ router.post('/round3/:batallaId', authMiddleware, verificarRol(['admin', 'usuari
  * /api/batallas/3vs3/resumen:
  *   get:
  *     summary: Obtiene un resumen de todas las batallas 3vs3
- *     tags:
- *       - Batallas 3vs3
+ *     tags: [Batallas 3vs3]
  *     security:
  *       - bearerAuth: []
  *     responses:
