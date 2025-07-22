@@ -2,6 +2,7 @@ const express = require('express');
 const cors = require('cors');
 const swaggerUi = require('swagger-ui-express');
 require('dotenv').config();
+const path = require('path');
 
 const conectarDB = require('./config/db');
 const specs = require('./swagger/swaggerConfig');
@@ -29,6 +30,9 @@ app.use('/api/batallas/3vs3', batalla3vs3Routes);
 
 // Swagger
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(specs));
+
+// Servir swagger-output.json como JSON público
+app.use('/api/docs-json', express.static(path.join(__dirname, 'swagger-output.json')));
 
 // Ruta de prueba
 app.get('/', (req, res) => {
