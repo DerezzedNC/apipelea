@@ -9,6 +9,11 @@ const {
 const authMiddleware = require('../middlewares/authMiddleware');
 const verificarRol = require('../middlewares/verificarRol');
 
+router.put('/:id/ordenar', authMiddleware, verificarRol(['admin', 'usuario']), (req, res) => {
+  req.params.id = req.params.id;
+  configurarOrdenRondas(req, res);
+});
+
 /**
  * @swagger
  * /api/batallas/3vs3/crear:
@@ -51,57 +56,6 @@ const verificarRol = require('../middlewares/verificarRol');
  *         description: Token inválido
  */
 router.post('/crear', authMiddleware, verificarRol(['admin', 'usuario']), crearBatalla3vs3);
-
-/**
- * @swagger
- * /api/batallas/3vs3/{id}/ordenar:
- *   put:
- *     summary: Configura el orden de las rondas en una batalla 3vs3 existente
- *     tags: [Batallas 3vs3]
- *     security:
- *       - bearerAuth: []
- *     parameters:
- *       - in: path
- *         name: id
- *         required: true
- *         schema:
- *           type: string
- *         description: ID de la batalla
- *     requestBody:
- *       required: true
- *       content:
- *         application/json:
- *           schema:
- *             type: object
- *             properties:
- *               ordenRondas:
- *                 type: array
- *                 items:
- *                   type: object
- *                   properties:
- *                     a:
- *                       type: integer
- *                     b:
- *                       type: integer
- *             required:
- *               - ordenRondas
- *             example:
- *               ordenRondas:
- *                 - { "a": 0, "b": 1 }
- *                 - { "a": 1, "b": 2 }
- *                 - { "a": 2, "b": 0 }
- *     responses:
- *       200:
- *         description: Orden de rondas configurado correctamente
- *       400:
- *         description: Error de validación
- *       404:
- *         description: Batalla no encontrada
- */
-router.put('/:id/ordenar', authMiddleware, verificarRol(['admin', 'usuario']), (req, res) => {
-  req.params.id = req.params.id;
-  configurarOrdenRondas(req, res);
-});
 
 /**
  * @swagger
