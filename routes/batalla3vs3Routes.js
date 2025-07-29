@@ -9,6 +9,52 @@ const {
 const authMiddleware = require('../middlewares/authMiddleware');
 const verificarRol = require('../middlewares/verificarRol');
 
+/**
+ * @swagger
+ * /api/batallas/3vs3/{id}/ordenar:
+ *   put:
+ *     summary: Configura el orden de peleadores para cada ronda de una batalla 3vs3
+ *     tags: [Batallas 3vs3]
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: ID de la batalla
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               ordenRondas:
+ *                 type: array
+ *                 description: Lista de 3 objetos con el orden de peleadores para cada ronda
+ *                 items:
+ *                   type: object
+ *                   properties:
+ *                     a:
+ *                       type: number
+ *                     b:
+ *                       type: number
+ *                 example:
+ *                   - { "a": 1, "b": 2 }
+ *                   - { "a": 3, "b": 4 }
+ *                   - { "a": 5, "b": 6 }
+ *     responses:
+ *       200:
+ *         description: Orden configurado correctamente
+ *       400:
+ *         description: Datos inválidos
+ *       404:
+ *         description: Batalla no encontrada
+ *       500:
+ *         description: Error interno del servidor
+ */
 router.put('/:id/ordenar', authMiddleware, verificarRol(['admin', 'usuario']), (req, res) => {
   req.params.id = req.params.id;
   configurarOrdenRondas(req, res);
