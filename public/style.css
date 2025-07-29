@@ -1,0 +1,119 @@
+/* FUENTES Y RESET */
+body {
+    margin: 0;
+    padding: 0;
+    background-color: #001e12;
+    font-family: 'Arial Black', sans-serif;
+    color: #fff;
+  }
+  
+  /* HEADER */
+  header {
+    background-color: #00703c;
+    padding: 20px;
+    text-align: center;
+    color: #f29c1f;
+    font-size: 2em;
+    border-bottom: 4px solid #0aff8a;
+    box-shadow: 0 0 10px #0aff8a;
+  }
+  
+  /* LAYOUT PRINCIPAL */
+  .seleccion-container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    padding: 30px;
+    gap: 30px;
+  }
+  
+  /* PANEL DE PERSONAJES */
+  .personajes-panel {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(80px, 1fr));
+    gap: 10px;
+    width: 400px;
+    background-color: #003921;
+    padding: 15px;
+    border: 3px solid #0aff8a;
+    border-radius: 15px;
+    box-shadow: 0 0 20px #00ffcc;
+  }
+  
+  /* CARD DE CADA PERSONAJE */
+  .personaje {
+    background-color: #001e12;
+    border: 2px solid #00ff66;
+    border-radius: 8px;
+    padding: 8px;
+    text-align: center;
+    cursor: pointer;
+    transition: transform 0.2s, box-shadow 0.3s;
+    color: #fff;
+  }
+  
+  .personaje:hover {
+    transform: scale(1.1);
+    box-shadow: 0 0 15px #f29c1f;
+  }
+  
+  .personaje.seleccionado {
+    background-color: #0aff8a;
+    color: #001e12;
+    font-weight: bold;
+  }
+  
+  /* PANEL DE EQUIPOS */
+  .equipos-container {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+  }
+  
+  .team {
+    background-color: #001e12;
+    border: 2px solid #f29c1f;
+    border-radius: 12px;
+    padding: 10px 20px;
+    box-shadow: 0 0 10px #f29c1f;
+    width: 300px;
+  }
+  
+  .team h2 {
+    color: #f29c1f;
+    text-align: center;
+  }
+  
+  .team-box {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-top: 10px;
+  }
+  
+  /* BOTÓN */
+  .botones {
+    text-align: center;
+    margin-top: 30px;
+  }
+  
+  button {
+    background-color: #00703c;
+    color: #fff;
+    font-size: 1.2em;
+    padding: 15px 30px;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    font-weight: bold;
+    box-shadow: 0 0 10px #0aff8a;
+    transition: background 0.3s, transform 0.2s;
+  }
+  
+  button:hover {
+    background-color: #0aff8a;
+    color: #001e12;
+    transform: scale(1.05);
+  }
+  

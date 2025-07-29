@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Selección de Batalla 3vs3</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <header>
+    <h1>🔥 SELECCIONA TU EQUIPO 🔥</h1>
+  </header>
+
+  <main>
+    <section class="seleccion-container">
+      <!-- Panel de Personajes -->
+      <div class="personajes-panel" id="gridPersonajes">
+        <!-- Aquí se agregan los personajes dinámicamente con JS -->
+      </div>
+
+      <!-- Panel de Equipos -->
+      <div class="equipos-container">
+        <div class="team" id="teamA">
+          <h2>TEAM A</h2>
+          <div class="team-box" id="boxA"></div>
+        </div>
+
+        <div class="team" id="teamB">
+          <h2>TEAM B</h2>
+          <div class="team-box" id="boxB"></div>
+        </div>
+      </div>
+    </section>
+
+    <div class="botones">
+      <button id="confirmarBtn">🎮 Crear Batalla</button>
+    </div>
+  </main>
+
+  <!-- Corrección aquí: -->
+  <script src="js/batalla.js"></script>
+</body>
+</html>

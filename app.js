@@ -1,9 +1,10 @@
 const express = require('express');
 const cors = require('cors');
+const path = require('path');
 const swaggerUi = require('swagger-ui-express');
 require('dotenv').config();
-const path = require('path');
 
+// Conexión BD y rutas
 const conectarDB = require('./config/db');
 const specs = require('./swagger/swaggerConfig');
 const authRoutes = require('./routes/authRoutes');
@@ -22,7 +23,10 @@ app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-// Rutas
+// Archivos estáticos (HTML, CSS, JS desde carpeta public/)
+app.use(express.static(path.join(__dirname, 'public')));
+
+// Rutas de API
 app.use('/api/auth', authRoutes);
 app.use('/api/personajes', personajeRoutes);
 app.use('/api/batallas', batallaRoutes);
@@ -30,27 +34,30 @@ app.use('/api/batallas/3vs3', batalla3vs3Routes);
 
 // Swagger
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(specs));
-
-// Servir swagger-output.json como JSON público
 app.use('/api/docs-json', express.static(path.join(__dirname, 'swagger-output.json')));
 
-// Ruta de prueba
+// Ruta raíz - redirige a index.html
 app.get('/', (req, res) => {
-  res.json({ mensaje: 'API de Batallas funcionando correctamente' });
+  res.sendFile(path.join(__dirname, 'public', 'index.html'));
 });
 
-// Middleware 404 - Ruta no encontrada
-app.use((req, res) => {
-  res.status(404).json({ mensaje: 'Ruta no encontrada' });
+// Middleware 404 (para rutas que no existen)
+app.use((req, res, next) => {
+  if (req.accepts('html')) {
+    res.status(404).sendFile(path.join(__dirname, 'public', '404.html')); // Opcional: si tienes un 404.html
+  } else {
+    res.status(404).json({ mensaje: 'Ruta no encontrada' });
+  }
 });
 
-// Manejo de errores
+// Manejo de errores generales
 app.use((err, req, res, next) => {
-  console.error(err.stack);
-  res.status(500).json({ mensaje: 'Algo salió mal!' });
+  console.error('Error interno:', err);
+  res.status(500).json({ mensaje: 'Error interno del servidor' });
 });
 
+// Iniciar servidor
 app.listen(PORT, () => {
-  console.log(`Servidor corriendo en puerto ${PORT}`);
-  console.log(`Documentación disponible en: http://localhost:${PORT}/api-docs`);
+  console.log(`✅ Servidor corriendo en http://localhost:${PORT}`);
+  console.log(`📘 Swagger disponible en http://localhost:${PORT}/api-docs`);
 });

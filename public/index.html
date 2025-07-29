@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <title>BATALLA 3VS3 - LOGIN</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@600&display=swap');
+
+    body {
+      font-family: 'Orbitron', sans-serif;
+      background: linear-gradient(135deg, #002b1a, #004d2a);
+      background-image: url('https://www.transparenttextures.com/patterns/black-linen.png');
+      color: #fff;
+      text-align: center;
+      padding-top: 80px;
+    }
+
+    h1 {
+      font-size: 3rem;
+      text-shadow: 2px 2px 0 #00ff88, -2px -2px 0 #000;
+      margin-bottom: 40px;
+    }
+
+    .login-box {
+      background: #003d2b;
+      padding: 40px;
+      border: 4px solid #00ff88;
+      border-radius: 15px;
+      width: 320px;
+      margin: auto;
+      box-shadow: 0 0 20px #00ff88;
+    }
+
+    input {
+      display: block;
+      width: 90%;
+      padding: 12px;
+      margin: 10px auto;
+      border: none;
+      border-radius: 5px;
+      font-size: 16px;
+    }
+
+    button {
+      padding: 12px 25px;
+      font-size: 18px;
+      font-weight: bold;
+      background-color: #00c46a;
+      color: white;
+      border: 2px solid #00ff88;
+      border-radius: 5px;
+      cursor: pointer;
+      transition: background-color 0.2s;
+    }
+
+    button:hover {
+      background-color: #009e52;
+    }
+
+    .mensaje {
+      margin-top: 20px;
+      font-weight: bold;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>🔥 BATALLA 3VS3 🔥</h1>
+
+  <div class="login-box">
+    <form id="loginForm">
+      <input type="text" id="nombre" placeholder="Usuario" required />
+      <input type="password" id="password" placeholder="Contraseña" required />
+      <button type="submit">ENTRAR</button>
+    </form>
+    <div class="mensaje" id="mensaje"></div>
+  </div>
+
+  <script>
+    document.getElementById("loginForm").addEventListener("submit", async (e) => {
+      e.preventDefault();
+      const nombre = document.getElementById("nombre").value;
+      const password = document.getElementById("password").value;
+      const mensaje = document.getElementById("mensaje");
+
+      try {
+        const res = await fetch("https://apipelea.onrender.com/api/auth/login", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ nombre, password })
+        });
+
+        const data = await res.json();
+
+        if (res.ok && data.token) {
+          localStorage.setItem("token", data.token);
+          localStorage.setItem("usuario", JSON.stringify(data.usuario));
+          mensaje.style.color = "#00ff88";
+          mensaje.innerText = `🎮 Bienvenido ${data.usuario.nombre} [${data.usuario.rol.toUpperCase()}]`;
+
+          setTimeout(() => {
+            window.location.href = "batalla.html";
+          }, 1500);
+        } else {
+          mensaje.style.color = "#ff8080";
+          mensaje.innerText = "⚠️ Usuario o contraseña incorrectos";
+        }
+      } catch (err) {
+        mensaje.style.color = "#ff8080";
+        mensaje.innerText = "💥 Error de conexión con el servidor";
+      }
+    });
+  </script>
+
+</body>
+</html>
