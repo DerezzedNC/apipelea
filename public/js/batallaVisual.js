@@ -18,6 +18,7 @@ async function ejecutarTurno() {
           "Authorization": `Bearer ${localStorage.getItem("token")}`
         }
       });
+      
     const data = await response.json();
 
     document.getElementById("turnoActual").textContent = `Turno #${data.turno} → Ataca: ${data.atacante.nombre}`;
