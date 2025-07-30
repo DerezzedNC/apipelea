@@ -47,7 +47,16 @@ const crearBatalla1vs1 = async (req, res) => {
     });
 
     await nuevaBatalla.save();
-    res.status(201).json({ mensaje: 'Batalla creada correctamente', batalla: nuevaBatalla });
+
+    res.status(201).json({
+      mensaje: 'Batalla creada correctamente',
+      batalla: {
+        personajeA: nuevaBatalla.personajeA,
+        personajeB: nuevaBatalla.personajeB,
+        turno: nuevoTurno,
+        ganador: null
+      }
+    });
 
   } catch (error) {
     console.error('Error al crear batalla 1vs1:', error);
