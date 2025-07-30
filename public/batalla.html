@@ -6,38 +6,37 @@
   <title>Selección de Batalla 3vs3</title>
   <link rel="stylesheet" href="style.css" />
 </head>
-<body>
-  <header>
-    <h1>🔥 SELECCIONA TU EQUIPO 🔥</h1>
-  </header>
+<body class="fondo-arcade">
+  <div class="contenedor-batalla">
+    <h1 class="titulo">🔥 SELECCIONA TU EQUIPO 🔥</h1>
 
-  <main>
-    <section class="seleccion-container">
-      <!-- Panel de Personajes -->
-      <div class="personajes-panel" id="gridPersonajes">
-        <!-- Aquí se agregan los personajes dinámicamente con JS -->
-      </div>
-
-      <!-- Panel de Equipos -->
-      <div class="equipos-container">
-        <div class="team" id="teamA">
-          <h2>TEAM A</h2>
-          <div class="team-box" id="boxA"></div>
+    <main>
+      <section class="seleccion-container">
+        <!-- Panel de Personajes -->
+        <div class="personajes-panel" id="gridPersonajes">
+          <!-- Aquí se agregan los personajes dinámicamente con JS -->
         </div>
 
-        <div class="team" id="teamB">
-          <h2>TEAM B</h2>
-          <div class="team-box" id="boxB"></div>
+        <!-- Panel de Equipos -->
+        <div class="equipos-container">
+          <div class="team" id="teamA">
+            <h2>TEAM A</h2>
+            <div class="team-box" id="boxA"></div>
+          </div>
+
+          <div class="team" id="teamB">
+            <h2>TEAM B</h2>
+            <div class="team-box" id="boxB"></div>
+          </div>
         </div>
+      </section>
+
+      <div class="botones">
+        <button id="confirmarBtn">🎮 Crear Batalla</button>
       </div>
-    </section>
+    </main>
+  </div>
 
-    <div class="botones">
-      <button id="confirmarBtn">🎮 Crear Batalla</button>
-    </div>
-  </main>
-
-  <!-- Corrección aquí: -->
   <script src="js/batalla.js"></script>
 </body>
 </html>

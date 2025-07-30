@@ -76,3 +76,208 @@ button:hover {
 .registro-link:hover {
   text-decoration: underline;
 }
+
+/* Estilos para páginas de batalla */
+.contenedor-batalla {
+  background: #002a20;
+  border: 5px solid #00ff88;
+  border-radius: 20px;
+  padding: 40px;
+  width: 90%;
+  max-width: 1200px;
+  margin: 20px auto;
+  box-shadow: 0 0 20px #00ff88;
+  text-align: center;
+}
+
+.seleccion-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+  justify-content: center;
+  margin: 20px 0;
+}
+
+.personajes-panel {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 15px;
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+.personaje {
+  background: #001d17;
+  border: 3px solid #00ff88;
+  border-radius: 10px;
+  padding: 15px;
+  text-align: center;
+  cursor: pointer;
+  transition: 0.3s;
+  color: #ffcc00;
+}
+
+.personaje:hover {
+  background: #003a2f;
+  border-color: #ffaa00;
+  transform: scale(1.05);
+}
+
+.personaje img {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  margin-bottom: 10px;
+}
+
+.personaje p {
+  font-weight: bold;
+  margin: 5px 0;
+  color: #00ff88;
+}
+
+.personaje small {
+  color: #ffaa00;
+  font-size: 0.9em;
+}
+
+.equipos-container {
+  display: flex;
+  gap: 30px;
+  justify-content: center;
+  margin: 20px 0;
+}
+
+.team {
+  background: #001d17;
+  border: 3px solid #00ff88;
+  border-radius: 15px;
+  padding: 20px;
+  min-width: 200px;
+}
+
+.team h2 {
+  color: #ffaa00;
+  margin-bottom: 15px;
+  font-size: 1.5em;
+  text-shadow: 2px 2px #000;
+}
+
+.team-box {
+  min-height: 100px;
+  border: 2px dashed #00ff88;
+  border-radius: 10px;
+  padding: 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.team-box .personaje-seleccionado {
+  background: #003a2f;
+  border: 2px solid #00ff88;
+  border-radius: 8px;
+  padding: 8px;
+  color: #00ff88;
+  font-size: 0.9em;
+}
+
+.botones {
+  margin: 30px 0;
+  display: flex;
+  gap: 15px;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.resultado {
+  background: #001d17;
+  border: 3px solid #00ff88;
+  border-radius: 15px;
+  padding: 20px;
+  margin: 20px 0;
+  color: #ffcc00;
+  text-align: left;
+  max-height: 300px;
+  overflow-y: auto;
+}
+
+.orden-container {
+  display: flex;
+  gap: 30px;
+  justify-content: center;
+  margin: 20px 0;
+}
+
+/* Estados de selección */
+.personaje.seleccionado {
+  background: #003a2f;
+  border-color: #ffaa00;
+  box-shadow: 0 0 10px #ffaa00;
+}
+
+.personaje.team-a {
+  background: #004422;
+  border-color: #00ff88;
+}
+
+.personaje.team-b {
+  background: #442200;
+  border-color: #ffaa00;
+}
+
+/* Mensajes */
+.mensaje {
+  margin-top: 20px;
+  font-weight: bold;
+  color: #00ff88;
+}
+
+.mensaje.error {
+  color: #ff8080;
+}
+
+.mensaje.success {
+  color: #00ff88;
+}
+
+/* Estilos para botones de selección */
+.botones-seleccion {
+  display: flex;
+  gap: 5px;
+  margin-top: 10px;
+}
+
+.botones-seleccion button {
+  flex: 1;
+  padding: 5px 8px;
+  font-size: 0.8em;
+  background: #00cc66;
+  border: none;
+  border-radius: 5px;
+  color: #fff;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.botones-seleccion button:hover {
+  background: #00ff88;
+  color: #000;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .contenedor-batalla {
+    width: 95%;
+    padding: 20px;
+  }
+  
+  .equipos-container {
+    flex-direction: column;
+    gap: 15px;
+  }
+  
+  .personajes-panel {
+    grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+  }
+}

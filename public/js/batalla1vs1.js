@@ -1,105 +1,164 @@
 let personajeAId = null;
 let personajeBId = null;
 let batallaIniciada = false;
+let personajesData = [];
 
-// Obtener los personajes disponibles
-fetch("/api/personajes", {
-  headers: {
-    Authorization: localStorage.getItem("token"),
-  },
-})
-  .then((res) => res.json())
-  .then((personajes) => {
+// ✅ 1. Cargar personajes desde la API
+async function cargarPersonajes() {
+  try {
+    const response = await fetch("https://apipelea.onrender.com/api/personajes", {
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem("token")}`
+      }
+    });
+
+    if (!response.ok) {
+      throw new Error('Error al cargar personajes');
+    }
+
+    personajesData = await response.json();
+    console.log("Personajes cargados:", personajesData);
+
     const panel = document.getElementById("personajes");
+    panel.innerHTML = ''; // Limpiar contenedor
 
-    personajes.forEach((p) => {
+    personajesData.forEach((p) => {
       const div = document.createElement("div");
-      div.classList.add("personaje-card");
+      div.classList.add("personaje");
       div.innerHTML = `
-        <h3>${p.nombre}</h3>
-        <p>Vida: ${p.vida}</p>
-        <p>Escudo: ${p.escudo}</p>
-        <p>Ataque: ${p.ataque}</p>
-        <button onclick="seleccionar('A', '${p._id}', '${p.nombre}')">Elegir para A</button>
-        <button onclick="seleccionar('B', '${p._id}', '${p.nombre}')">Elegir para B</button>
+        <img src="${p.imagen || 'https://via.placeholder.com/80'}" alt="${p.nombre}" />
+        <p>${p.nombre}</p>
+        <small>HP: ${p.vida} | ATK: ${p.ataque} | DEF: ${p.defensa}</small>
+        <div class="botones-seleccion">
+          <button onclick="seleccionar('A', '${p._id}', '${p.nombre}', this)">Elegir para A</button>
+          <button onclick="seleccionar('B', '${p._id}', '${p.nombre}', this)">Elegir para B</button>
+        </div>
       `;
       panel.appendChild(div);
     });
-  });
-
-// Selección de personajes
-function seleccionar(equipo, id, nombre) {
-  if (equipo === 'A') {
-    personajeAId = id;
-    document.getElementById("equipoA").textContent = nombre;
-  } else {
-    personajeBId = id;
-    document.getElementById("equipoB").textContent = nombre;
+  } catch (error) {
+    console.error("Error al cargar personajes:", error);
+    const panel = document.getElementById("personajes");
+    panel.innerHTML = '<p style="color: #ff8080;">Error al cargar personajes</p>';
   }
 }
 
-// Crear batalla 1vs1
-function crearBatalla1vs1() {
+// ✅ 2. Selección de personajes
+function seleccionar(equipo, id, nombre, button) {
+  if (equipo === 'A') {
+    personajeAId = id;
+    document.getElementById("equipoA").innerHTML = `
+      <div class="personaje-seleccionado">
+        <strong>${nombre}</strong><br>
+        <small>Seleccionado para Jugador A</small>
+      </div>
+    `;
+    // Limpiar selección anterior
+    document.querySelectorAll('.personaje button').forEach(btn => {
+      btn.style.background = '#00cc66';
+    });
+    button.style.background = '#00ff88';
+    button.style.color = '#000';
+  } else {
+    personajeBId = id;
+    document.getElementById("equipoB").innerHTML = `
+      <div class="personaje-seleccionado">
+        <strong>${nombre}</strong><br>
+        <small>Seleccionado para Jugador B</small>
+      </div>
+    `;
+    // Limpiar selección anterior
+    document.querySelectorAll('.personaje button').forEach(btn => {
+      btn.style.background = '#00cc66';
+    });
+    button.style.background = '#00ff88';
+    button.style.color = '#000';
+  }
+}
+
+// ✅ 3. Crear batalla 1vs1
+async function crearBatalla1vs1() {
   if (!personajeAId || !personajeBId) {
     alert("Debes elegir ambos personajes.");
     return;
   }
 
-  fetch("/api/batallas/1vs1", {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-      Authorization: localStorage.getItem("token"),
-    },
-    body: JSON.stringify({
-      personajeA: personajeAId,
-      personajeB: personajeBId,
-    }),
-  })
-    .then((res) => res.json())
-    .then((data) => {
+  try {
+    const response = await fetch("https://apipelea.onrender.com/api/batallas/1vs1", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${localStorage.getItem("token")}`
+      },
+      body: JSON.stringify({
+        personajeA: personajeAId,
+        personajeB: personajeBId,
+      }),
+    });
+
+    const data = await response.json();
+    if (response.ok) {
       batallaIniciada = true;
       mostrarResultado(data);
-    })
-    .catch((err) => {
-      console.error("Error al iniciar la batalla", err);
-    });
+    } else {
+      alert("Error: " + (data.message || data.mensaje));
+    }
+  } catch (error) {
+    console.error("Error al iniciar la batalla", error);
+    alert("Error de conexión con el servidor");
+  }
 }
 
-// Ejecutar siguiente turno
-function ejecutarTurno1vs1() {
+// ✅ 4. Ejecutar siguiente turno
+async function ejecutarTurno1vs1() {
   if (!batallaIniciada) {
     alert("Primero debes iniciar la batalla.");
     return;
   }
 
-  fetch("/api/batallas/1vs1", {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-      Authorization: localStorage.getItem("token"),
-    },
-    body: JSON.stringify({
-      personajeA: personajeAId,
-      personajeB: personajeBId,
-    }),
-  })
-    .then((res) => res.json())
-    .then((data) => {
-      mostrarResultado(data);
-    })
-    .catch((err) => {
-      console.error("Error al ejecutar turno", err);
+  try {
+    const response = await fetch("https://apipelea.onrender.com/api/batallas/1vs1/turno", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${localStorage.getItem("token")}`
+      },
+      body: JSON.stringify({
+        personajeA: personajeAId,
+        personajeB: personajeBId,
+      }),
     });
+
+    const data = await response.json();
+    if (response.ok) {
+      mostrarResultado(data);
+    } else {
+      alert("Error: " + (data.message || data.mensaje));
+    }
+  } catch (error) {
+    console.error("Error al ejecutar turno", error);
+    alert("Error de conexión con el servidor");
+  }
 }
 
-// Mostrar resultado de cada turno
+// ✅ 5. Mostrar resultado de cada turno
 function mostrarResultado(data) {
   const resultadoDiv = document.getElementById("resultado");
   resultadoDiv.innerHTML = `
-    <h3>${data.mensaje || "Turno ejecutado"}</h3>
-    <p><strong>${data.personajeA.nombre}</strong> - Vida: ${data.personajeA.vida}, Escudo: ${data.personajeA.escudo}</p>
-    <p><strong>${data.personajeB.nombre}</strong> - Vida: ${data.personajeB.vida}, Escudo: ${data.personajeB.escudo}</p>
-    <p><em>Turno actual: ${data.turno}</em></p>
+    <h3 style="color: #ffaa00;">${data.mensaje || "Turno ejecutado"}</h3>
+    <div style="display: flex; justify-content: space-around; margin: 20px 0;">
+      <div style="background: #004422; padding: 15px; border-radius: 10px; border: 2px solid #00ff88;">
+        <strong style="color: #00ff88;">${data.personajeA?.nombre || 'Jugador A'}</strong><br>
+        <small>Vida: ${data.personajeA?.vida || 0} | Defensa: ${data.personajeA?.defensa || 0}</small>
+      </div>
+      <div style="background: #442200; padding: 15px; border-radius: 10px; border: 2px solid #ffaa00;">
+        <strong style="color: #ffaa00;">${data.personajeB?.nombre || 'Jugador B'}</strong><br>
+        <small>Vida: ${data.personajeB?.vida || 0} | Defensa: ${data.personajeB?.defensa || 0}</small>
+      </div>
+    </div>
+    <p style="text-align: center; color: #ffcc00;"><em>Turno actual: ${data.turno || 'N/A'}</em></p>
   `;
 }
+
+// ✅ 6. Inicializar
+cargarPersonajes();

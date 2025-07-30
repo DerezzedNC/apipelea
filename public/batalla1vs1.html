@@ -6,37 +6,37 @@
   <title>Batalla 1 vs 1</title>
   <link rel="stylesheet" href="style.css" />
 </head>
-<body>
-  <header>
-    <h1>⚔️ Batalla 1 vs 1 - Turno a Turno</h1>
-  </header>
+<body class="fondo-arcade">
+  <div class="contenedor-batalla">
+    <h1 class="titulo">⚔️ Batalla 1 vs 1 - Turno a Turno</h1>
 
-  <main class="seleccion-container">
-    <section class="personajes-panel" id="personajes">
-      <!-- Aquí se cargarán los personajes -->
+    <main class="seleccion-container">
+      <section class="personajes-panel" id="personajes">
+        <!-- Aquí se cargarán los personajes -->
+      </section>
+
+      <section class="equipos-container">
+        <div class="team" id="teamA">
+          <h2>Jugador A</h2>
+          <div class="team-box" id="equipoA"></div>
+        </div>
+
+        <div class="team" id="teamB">
+          <h2>Jugador B</h2>
+          <div class="team-box" id="equipoB"></div>
+        </div>
+      </section>
+    </main>
+
+    <div class="botones">
+      <button onclick="crearBatalla1vs1()">🎮 Iniciar Batalla</button>
+      <button onclick="ejecutarTurno1vs1()">⚔️ Ejecutar Turno</button>
+    </div>
+
+    <section class="resultado" id="resultado">
+      <!-- Aquí se mostrará el resultado de cada turno -->
     </section>
-
-    <section class="equipos-container">
-      <div class="team" id="teamA">
-        <h2>Jugador A</h2>
-        <div class="team-box" id="equipoA"></div>
-      </div>
-
-      <div class="team" id="teamB">
-        <h2>Jugador B</h2>
-        <div class="team-box" id="equipoB"></div>
-      </div>
-    </section>
-  </main>
-
-  <div class="botones">
-    <button onclick="crearBatalla1vs1()">🎮 Iniciar Batalla</button>
-    <button onclick="ejecutarTurno1vs1()">⚔️ Ejecutar Turno</button>
   </div>
-
-  <section class="resultado" id="resultado">
-    <!-- Aquí se mostrará el resultado de cada turno -->
-  </section>
 
   <script src="js/batalla1vs1.js"></script>
 </body>

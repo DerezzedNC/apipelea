@@ -6,28 +6,28 @@
   <title>Ordenar Rondas - 3vs3</title>
   <link rel="stylesheet" href="style.css" />
 </head>
-<body>
-  <header>
-    <h1>⚔️ ORDEN DE RONDAS ⚔️</h1>
-  </header>
+<body class="fondo-arcade">
+  <div class="contenedor-batalla">
+    <h1 class="titulo">⚔️ ORDEN DE RONDAS ⚔️</h1>
 
-  <main>
-    <div class="orden-container">
-      <div class="team" id="ordenTeamA">
-        <h2>ORDEN TEAM A</h2>
-        <div class="team-box" id="ordenBoxA"></div>
+    <main>
+      <div class="orden-container">
+        <div class="team" id="ordenTeamA">
+          <h2>ORDEN TEAM A</h2>
+          <div class="team-box" id="ordenBoxA"></div>
+        </div>
+
+        <div class="team" id="ordenTeamB">
+          <h2>ORDEN TEAM B</h2>
+          <div class="team-box" id="ordenBoxB"></div>
+        </div>
       </div>
 
-      <div class="team" id="ordenTeamB">
-        <h2>ORDEN TEAM B</h2>
-        <div class="team-box" id="ordenBoxB"></div>
+      <div class="botones">
+        <button id="confirmarOrden">✅ Confirmar Orden</button>
       </div>
-    </div>
-
-    <div class="botones">
-      <button id="confirmarOrden">✅ Confirmar Orden</button>
-    </div>
-  </main>
+    </main>
+  </div>
 
   <script src="js/ordenar.js"></script>
 </body>
