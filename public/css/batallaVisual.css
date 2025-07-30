@@ -1,0 +1,43 @@
+body {
+    background-color: #0d0d0d;
+    color: white;
+    font-family: 'Arial';
+    text-align: center;
+  }
+  
+  .escenario {
+    background-image: url('fondo-pelea.jpg'); /* Usa tu imagen estilo purgatorio o Pokémon */
+    background-size: cover;
+    height: 400px;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    margin: 20px;
+    border: 5px solid green;
+    border-radius: 20px;
+  }
+  
+  .personaje {
+    width: 150px;
+    text-align: center;
+  }
+  
+  .vida {
+    width: 100%;
+    background: red;
+    height: 20px;
+    border-radius: 10px;
+    margin-top: 5px;
+  }
+  
+  .barra {
+    background: limegreen;
+    height: 100%;
+    width: 100%;
+    border-radius: 10px;
+  }
+  
+  .acciones {
+    margin-top: 20px;
+  }
+  
