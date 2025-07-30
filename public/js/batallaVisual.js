@@ -45,6 +45,18 @@ document.addEventListener('DOMContentLoaded', async () => {
     return;
   }
 
+  // Configurar event listeners para botones del modal
+  const nuevaBatallaBtn = document.getElementById('nuevaBatallaBtn');
+  const volverMenuBtn = document.getElementById('volverMenuBtn');
+  
+  if (nuevaBatallaBtn) {
+    nuevaBatallaBtn.addEventListener('click', nuevaBatalla);
+  }
+  
+  if (volverMenuBtn) {
+    volverMenuBtn.addEventListener('click', volverMenu);
+  }
+
   await inicializarBatalla();
   configurarControles();
   actualizarInterfaz();
