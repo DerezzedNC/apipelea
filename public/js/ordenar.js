@@ -1,3 +1,9 @@
+// ✅ Verificación de autenticación
+if (!localStorage.getItem("token")) {
+  alert("Necesitas iniciar sesión para acceder");
+  window.location.href = "/login.html";
+}
+
 document.addEventListener("DOMContentLoaded", () => {
     const boxA = document.getElementById("ordenBoxA");
     const boxB = document.getElementById("ordenBoxB");

@@ -1,5 +1,11 @@
 // ===== BATALLA VISUAL KOF - JAVASCRIPT =====
 
+// ✅ Verificación de autenticación
+if (!localStorage.getItem("token")) {
+  alert("Necesitas iniciar sesión para acceder");
+  window.location.href = "/login.html";
+}
+
 // Variables globales
 let batallaId = localStorage.getItem("batallaId");
 let personajeA = localStorage.getItem("personajeA");

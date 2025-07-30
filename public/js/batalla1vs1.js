@@ -1,3 +1,9 @@
+// ✅ Verificación de autenticación
+if (!localStorage.getItem("token")) {
+  alert("Necesitas iniciar sesión para acceder");
+  window.location.href = "/login.html";
+}
+
 let personajeAId = null;
 let personajeBId = null;
 let batallaIniciada = false;

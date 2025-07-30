@@ -1,3 +1,9 @@
+// ✅ Verificación de autenticación
+if (!localStorage.getItem("token")) {
+  alert("Necesitas iniciar sesión para acceder");
+  window.location.href = "/login.html";
+}
+
 const personajesContainer = document.getElementById("gridPersonajes");
 const confirmarBtn = document.getElementById("crearBatallaBtn");
 const boxA = document.getElementById("boxA");

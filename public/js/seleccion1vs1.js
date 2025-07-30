@@ -1,3 +1,9 @@
+// ✅ Verificación de autenticación
+if (!localStorage.getItem("token")) {
+  alert("Necesitas iniciar sesión para acceder");
+  window.location.href = "/login.html";
+}
+
 const panelPersonajes = document.getElementById("panel-personajes");
 const teamABox = document.getElementById("teamA");
 const teamBBox = document.getElementById("teamB");

@@ -26,6 +26,12 @@ app.use(express.urlencoded({ extended: true }));
 // Archivos estáticos (HTML, CSS, JS desde carpeta public/)
 app.use(express.static(path.join(__dirname, 'public')));
 
+// Ruta específica para archivos JavaScript
+app.use('/js', express.static(path.join(__dirname, 'public/js')));
+
+// Ruta específica para archivos CSS
+app.use('/css', express.static(path.join(__dirname, 'public/css')));
+
 // Rutas de API
 app.use('/api/auth', authRoutes);
 app.use('/api/personajes', personajeRoutes);
