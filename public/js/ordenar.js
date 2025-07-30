@@ -111,7 +111,7 @@ document.addEventListener("DOMContentLoaded", () => {
         const data = await response.json();
         if (response.ok) {
           alert("¡Orden establecido! Ahora puedes comenzar las rondas.");
-          // Aquí puedes redirigir a la página de batalla
+          // Redirigir a la página de batalla 3vs3
           window.location.href = "batalla3vs3.html";
         } else {
           alert("Error: " + (data.message || data.mensaje));

@@ -155,20 +155,29 @@ async function ejecutarTurno1vs1() {
 
 // ✅ 5. Mostrar resultado de cada turno
 function mostrarResultado(data) {
+  console.log("Datos recibidos del servidor:", data);
+  
   const resultadoDiv = document.getElementById("resultado");
+  
+  // Acceder correctamente a los datos anidados
+  const personajeA = data.personajeA || {};
+  const personajeB = data.personajeB || {};
+  const turno = data.turno || {};
+  
   resultadoDiv.innerHTML = `
     <h3 style="color: #ffaa00;">${data.mensaje || "Turno ejecutado"}</h3>
     <div style="display: flex; justify-content: space-around; margin: 20px 0;">
       <div style="background: #004422; padding: 15px; border-radius: 10px; border: 2px solid #00ff88;">
-        <strong style="color: #00ff88;">${data.personajeA?.nombre || 'Jugador A'}</strong><br>
-        <small>Vida: ${data.personajeA?.vida || 0} | Defensa: ${data.personajeA?.defensa || 0} | Escudo: ${data.personajeA?.escudo || 0}</small>
+        <strong style="color: #00ff88;">${personajeA.nombre || 'Jugador A'}</strong><br>
+        <small>Vida: ${personajeA.vida || 0} | Ataque: ${personajeA.ataque || 0} | Escudo: ${personajeA.escudo || 0}</small>
       </div>
       <div style="background: #442200; padding: 15px; border-radius: 10px; border: 2px solid #ffaa00;">
-        <strong style="color: #ffaa00;">${data.personajeB?.nombre || 'Jugador B'}</strong><br>
-        <small>Vida: ${data.personajeB?.vida || 0} | Defensa: ${data.personajeB?.defensa || 0} | Escudo: ${data.personajeB?.escudo || 0}</small>
+        <strong style="color: #ffaa00;">${personajeB.nombre || 'Jugador B'}</strong><br>
+        <small>Vida: ${personajeB.vida || 0} | Ataque: ${personajeB.ataque || 0} | Escudo: ${personajeB.escudo || 0}</small>
       </div>
     </div>
-    <p style="text-align: center; color: #ffcc00;"><em>Turno actual: ${data.turno || 'N/A'}</em></p>
+    <p style="text-align: center; color: #ffcc00;"><em>Turno actual: ${turno.numero || 'N/A'}</em></p>
+    ${data.ganador ? `<p style="text-align: center; color: #00ff88; font-weight: bold;">🏆 ¡${data.ganador} ha ganado! 🏆</p>` : ''}
   `;
 }
 

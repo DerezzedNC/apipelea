@@ -292,3 +292,21 @@ button:hover {
     grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
   }
 }
+
+/* Estilos para resultados de batalla */
+#resultado-ronda {
+  margin-top: 20px;
+}
+
+#estado-batalla {
+  margin-bottom: 20px;
+}
+
+/* Animaciones para resultados */
+.personaje-seleccionado {
+  transition: all 0.3s ease;
+}
+
+.personaje-seleccionado:hover {
+  transform: scale(1.02);
+}
