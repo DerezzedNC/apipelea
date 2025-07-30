@@ -22,7 +22,6 @@ async function cargarPersonajes() {
     const panel = document.getElementById("personajes");
     panel.innerHTML = ''; // Limpiar contenedor
 
-    // Limitar a los primeros 10 personajes
     const personajesLimitados = personajesData.slice(0, 10);
     
     personajesLimitados.forEach((p) => {
@@ -46,9 +45,8 @@ async function cargarPersonajes() {
   }
 }
 
-// ✅ 2. Selección de personajes
+// ✅ 2. Seleccionar personajes
 function seleccionar(equipo, id, nombre, button) {
-  // Verificar si el personaje ya está seleccionado en el otro equipo
   if (equipo === 'A') {
     if (personajeBId === id) {
       alert("Este personaje ya está seleccionado para el Jugador B");
@@ -61,12 +59,6 @@ function seleccionar(equipo, id, nombre, button) {
         <small>Seleccionado para Jugador A</small>
       </div>
     `;
-    // Limpiar selección anterior
-    document.querySelectorAll('.personaje button').forEach(btn => {
-      btn.style.background = '#00cc66';
-    });
-    button.style.background = '#00ff88';
-    button.style.color = '#000';
   } else {
     if (personajeAId === id) {
       alert("Este personaje ya está seleccionado para el Jugador A");
@@ -79,16 +71,18 @@ function seleccionar(equipo, id, nombre, button) {
         <small>Seleccionado para Jugador B</small>
       </div>
     `;
-    // Limpiar selección anterior
-    document.querySelectorAll('.personaje button').forEach(btn => {
-      btn.style.background = '#00cc66';
-    });
-    button.style.background = '#00ff88';
-    button.style.color = '#000';
   }
+
+  // Estilo visual de selección
+  document.querySelectorAll('.personaje button').forEach(btn => {
+    btn.style.background = '#00cc66';
+    btn.style.color = '#fff';
+  });
+  button.style.background = '#00ff88';
+  button.style.color = '#000';
 }
 
-// ✅ 3. Crear batalla 1vs1
+// ✅ 3. Crear batalla 1vs1 y redirigir al escenario
 async function crearBatalla1vs1() {
   if (!personajeAId || !personajeBId) {
     alert("Debes elegir ambos personajes.");
@@ -111,7 +105,14 @@ async function crearBatalla1vs1() {
     const data = await response.json();
     if (response.ok) {
       batallaIniciada = true;
-      mostrarResultado(data);
+
+      // ✅ Guardar datos para batallaVisual.html
+      localStorage.setItem("batallaId", data._id || data.id || data.batalla?._id);
+      localStorage.setItem("personajeA", personajeAId);
+      localStorage.setItem("personajeB", personajeBId);
+
+      // ✅ Redirigir al escenario de batalla visual
+      window.location.href = "batallaVisual.html";
     } else {
       alert("Error: " + (data.message || data.mensaje));
     }
@@ -121,65 +122,5 @@ async function crearBatalla1vs1() {
   }
 }
 
-// ✅ 4. Ejecutar siguiente turno
-async function ejecutarTurno1vs1() {
-  if (!batallaIniciada) {
-    alert("Primero debes iniciar la batalla.");
-    return;
-  }
-
-  try {
-    const response = await fetch("https://apipelea.onrender.com/api/batallas/1vs1/turno", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${localStorage.getItem("token")}`
-      },
-      body: JSON.stringify({
-        personajeA: personajeAId,
-        personajeB: personajeBId,
-      }),
-    });
-
-    const data = await response.json();
-    if (response.ok) {
-      mostrarResultado(data);
-    } else {
-      alert("Error: " + (data.message || data.mensaje));
-    }
-  } catch (error) {
-    console.error("Error al ejecutar turno", error);
-    alert("Error de conexión con el servidor");
-  }
-}
-
-// ✅ 5. Mostrar resultado de cada turno
-function mostrarResultado(data) {
-  console.log("Datos recibidos del servidor:", data);
-
-  const resultadoDiv = document.getElementById("resultado");
-
-  const batalla = data.batalla || {};
-  const personajeA = batalla.personajeA || {};
-  const personajeB = batalla.personajeB || {};
-  const turno = batalla.turnoActual || {};
-
-  resultadoDiv.innerHTML = `
-    <h3 style="color: #ffaa00;">${data.mensaje || "Turno ejecutado"}</h3>
-    <div style="display: flex; justify-content: space-around; margin: 20px 0;">
-      <div style="background: #004422; padding: 15px; border-radius: 10px; border: 2px solid #00ff88;">
-        <strong style="color: #00ff88;">${personajeA.nombre || 'Jugador A'}</strong><br>
-        <small>Vida: ${personajeA.vida || 0} | Ataque: ${personajeA.ataque || 0} | Escudo: ${personajeA.escudo || 0}</small>
-      </div>
-      <div style="background: #442200; padding: 15px; border-radius: 10px; border: 2px solid #ffaa00;">
-        <strong style="color: #ffaa00;">${personajeB.nombre || 'Jugador B'}</strong><br>
-        <small>Vida: ${personajeB.vida || 0} | Ataque: ${personajeB.ataque || 0} | Escudo: ${personajeB.escudo || 0}</small>
-      </div>
-    </div>
-    <p style="text-align: center; color: #ffcc00;"><em>Turno actual: ${turno.numero || 'N/A'}</em></p>
-    ${data.ganador ? `<p style="text-align: center; color: #00ff88; font-weight: bold;">🏆 ¡${data.ganador} ha ganado! 🏆</p>` : ''}
-  `;
-}
-
-// ✅ 6. Inicializar
+// ✅ 4. Inicializar
 cargarPersonajes();

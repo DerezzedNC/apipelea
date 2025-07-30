@@ -1,43 +1,71 @@
-body {
-    background-color: #0d0d0d;
-    color: white;
-    font-family: 'Arial';
+body.fondo-arcade {
+    background: linear-gradient(to bottom right, #000000, #003300);
+    font-family: 'Courier New', monospace;
+    color: #ffffff;
+    margin: 0;
+    padding: 20px;
+  }
+  
+  .titulo {
     text-align: center;
+    color: #00ff88;
+    font-size: 2em;
+    margin-bottom: 20px;
+  }
+  
+  .contenedor-batalla {
+    max-width: 800px;
+    margin: auto;
+    padding: 20px;
+    background: #111;
+    border: 2px solid #00ff88;
+    border-radius: 10px;
+    box-shadow: 0 0 20px #00ff88;
   }
   
   .escenario {
-    background-image: url('fondo-pelea.jpg'); /* Usa tu imagen estilo purgatorio o Pokémon */
-    background-size: cover;
-    height: 400px;
     display: flex;
     justify-content: space-around;
-    align-items: center;
-    margin: 20px;
-    border: 5px solid green;
-    border-radius: 20px;
+    margin-bottom: 20px;
   }
   
   .personaje {
-    width: 150px;
     text-align: center;
+    width: 40%;
   }
   
   .vida {
-    width: 100%;
-    background: red;
+    background: #333;
+    border: 1px solid #00ff88;
     height: 20px;
     border-radius: 10px;
+    overflow: hidden;
     margin-top: 5px;
   }
   
   .barra {
-    background: limegreen;
+    background: #00ff88;
     height: 100%;
     width: 100%;
-    border-radius: 10px;
+    transition: width 0.3s ease;
   }
   
   .acciones {
-    margin-top: 20px;
+    text-align: center;
+  }
+  
+  .acciones button {
+    padding: 10px 20px;
+    background: #ffaa00;
+    border: none;
+    color: #000;
+    font-size: 1.1em;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background 0.2s ease;
+  }
+  
+  .acciones button:hover {
+    background: #ffcc00;
   }
   

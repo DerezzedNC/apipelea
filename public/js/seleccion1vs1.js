@@ -35,7 +35,6 @@ async function cargarPersonajes() {
 }
 
 function seleccionarPersonaje(personaje, div) {
-  // Ya seleccionado en algún equipo
   if (teamA?.id === personaje._id || teamB?.id === personaje._id) return;
 
   if (!teamA) {
@@ -70,7 +69,12 @@ crearBatallaBtn.addEventListener("click", async () => {
     const result = await res.json();
 
     if (res.ok) {
+      // ✅ Guardamos todo lo necesario para batallaVisual
       localStorage.setItem("batallaId", result._id || result.id);
+      localStorage.setItem("personajeA", teamA.id);
+      localStorage.setItem("personajeB", teamB.id);
+
+      // ✅ Redirigir al escenario visual
       window.location.href = "batallaVisual.html";
     } else {
       alert(result.mensaje || result.message || "Error al crear batalla");

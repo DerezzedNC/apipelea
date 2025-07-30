@@ -2,29 +2,35 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Batalla 1 vs 1</title>
   <link rel="stylesheet" href="batallaVisual.css" />
 </head>
-<body>
-  <div class="escenario">
-    <div class="personaje" id="personajeA">
-      <p id="nombreA">Jugador A</p>
-      <div class="vida">
-        <div class="barra" id="vidaA"></div>
+<body class="fondo-arcade">
+
+  <div class="contenedor-batalla">
+    <h1 class="titulo">⚔️ Batalla 1 vs 1 - Modo Turno</h1>
+
+    <div class="escenario">
+      <div class="personaje" id="personajeA">
+        <p id="nombreA">Jugador A</p>
+        <div class="vida">
+          <div class="barra" id="vidaA"></div>
+        </div>
+      </div>
+
+      <div class="personaje" id="personajeB">
+        <p id="nombreB">Jugador B</p>
+        <div class="vida">
+          <div class="barra" id="vidaB"></div>
+        </div>
       </div>
     </div>
 
-    <div class="personaje" id="personajeB">
-      <p id="nombreB">Jugador B</p>
-      <div class="vida">
-        <div class="barra" id="vidaB"></div>
-      </div>
+    <div class="acciones">
+      <p id="turnoActual">Esperando turno...</p>
+      <button onclick="ejecutarTurno()">⚔️ Ejecutar turno (Presiona espacio)</button>
     </div>
-  </div>
-
-  <div class="acciones">
-    <p id="turnoActual">Esperando turno...</p>
-    <button onclick="ejecutarTurno()">Ejecutar turno (espacio)</button>
   </div>
 
   <script src="batallaVisual.js"></script>
