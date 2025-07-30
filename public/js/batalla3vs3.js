@@ -170,7 +170,21 @@ function mostrarResultadoRonda(data) {
   `;
 }
 
-// ✅ 6. Inicializar cuando se carga la página
+// ✅ 6. Configurar event listeners
 document.addEventListener("DOMContentLoaded", () => {
+  const botonTurno = document.getElementById('ejecutarTurno');
+  const botonVolver = document.getElementById('volverMenu');
+  
+  if (botonTurno) {
+    botonTurno.addEventListener('click', ejecutarTurnoRonda);
+  }
+  
+  if (botonVolver) {
+    botonVolver.addEventListener('click', () => {
+      window.location.href = '/modo.html';
+    });
+  }
+  
+  // Inicializar
   inicializarBatalla3vs3();
 }); 

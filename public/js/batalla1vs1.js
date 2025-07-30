@@ -123,5 +123,63 @@ async function crearBatalla1vs1() {
   }
 }
 
-// ✅ 4. Inicializar
-cargarPersonajes();
+// ✅ 4. Ejecutar turno 1vs1
+async function ejecutarTurno1vs1() {
+  if (!batallaIniciada) {
+    alert("Debes iniciar una batalla primero.");
+    return;
+  }
+
+  try {
+    const response = await fetch(`https://apipelea.onrender.com/api/batallas/${batallaId}/turno`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": `Bearer ${localStorage.getItem("token")}`
+      }
+    });
+
+    const data = await response.json();
+    
+    if (response.ok) {
+      mostrarResultadoTurno(data);
+    } else {
+      alert("Error: " + (data.message || data.mensaje));
+    }
+  } catch (error) {
+    console.error("Error al ejecutar turno:", error);
+    alert("Error de conexión con el servidor");
+  }
+}
+
+// ✅ 5. Mostrar resultado del turno
+function mostrarResultadoTurno(data) {
+  const resultadoDiv = document.getElementById("resultado");
+  if (!resultadoDiv) return;
+
+  resultadoDiv.innerHTML = `
+    <h3>${data.mensaje || "Turno ejecutado"}</h3>
+    <p>Atacante: ${data.atacante?.nombre || 'N/A'}</p>
+    <p>Defensor: ${data.defensor?.nombre || 'N/A'}</p>
+    <p>Daño: ${data.daño || 0}</p>
+    <p>Vida restante: ${data.vidaRestante || 0}</p>
+    ${data.ganador ? `<p><strong>🏆 ¡${data.ganador.nombre} ha ganado! 🏆</strong></p>` : ''}
+  `;
+}
+
+// ✅ 6. Configurar event listeners
+document.addEventListener('DOMContentLoaded', function() {
+  const botonIniciar = document.getElementById('iniciarBatalla');
+  const botonTurno = document.getElementById('ejecutarTurno');
+  
+  if (botonIniciar) {
+    botonIniciar.addEventListener('click', crearBatalla1vs1);
+  }
+  
+  if (botonTurno) {
+    botonTurno.addEventListener('click', ejecutarTurno1vs1);
+  }
+  
+  // Inicializar
+  cargarPersonajes();
+});

@@ -23,41 +23,6 @@
     <div class="mensaje" id="mensaje"></div>
   </div>
 
-  <script>
-    document.getElementById("loginForm").addEventListener("submit", async (e) => {
-      e.preventDefault();
-      const nombre = document.getElementById("nombre").value;
-      const password = document.getElementById("password").value;
-      const mensaje = document.getElementById("mensaje");
-
-      try {
-        const res = await fetch("https://apipelea.onrender.com/api/auth/login", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ nombre, password })
-        });
-
-        const data = await res.json();
-
-        if (res.ok && data.token) {
-          localStorage.setItem("token", data.token);
-          localStorage.setItem("usuario", JSON.stringify(data.usuario));
-          mensaje.style.color = "#00ff88";
-          mensaje.innerText = `🎮 Bienvenido ${data.usuario.nombre} [${data.usuario.rol.toUpperCase()}]`;
-
-          setTimeout(() => {
-            window.location.href = "batalla.html";
-          }, 1500);
-        } else {
-          mensaje.style.color = "#ff8080";
-          mensaje.innerText = "⚠️ Usuario o contraseña incorrectos";
-        }
-      } catch (err) {
-        mensaje.style.color = "#ff8080";
-        mensaje.innerText = "💥 Error de conexión con el servidor";
-      }
-    });
-  </script>
-
+  <script src="js/index.js"></script>
 </body>
 </html>
