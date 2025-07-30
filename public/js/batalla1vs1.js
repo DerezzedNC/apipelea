@@ -156,14 +156,14 @@ async function ejecutarTurno1vs1() {
 // ✅ 5. Mostrar resultado de cada turno
 function mostrarResultado(data) {
   console.log("Datos recibidos del servidor:", data);
-  
+
   const resultadoDiv = document.getElementById("resultado");
-  
-  // Acceder correctamente a los datos anidados
-  const personajeA = data.personajeA || {};
-  const personajeB = data.personajeB || {};
-  const turno = data.turno || {};
-  
+
+  const batalla = data.batalla || {};
+  const personajeA = batalla.personajeA || {};
+  const personajeB = batalla.personajeB || {};
+  const turno = batalla.turnoActual || {};
+
   resultadoDiv.innerHTML = `
     <h3 style="color: #ffaa00;">${data.mensaje || "Turno ejecutado"}</h3>
     <div style="display: flex; justify-content: space-around; margin: 20px 0;">
