@@ -67,25 +67,54 @@ const crearOBatallar = async (req, res) => {
     // ⚔️ Ejecutar turno
     const turnoNum = batalla.turnos.length + 1;
     const esTurnoPar = turnoNum % 2 === 0;
-    let atacante = esTurnoPar ? batalla.personajeB : batalla.personajeA;
-    let defensor = esTurnoPar ? batalla.personajeA : batalla.personajeB;
+    
+    // Determinar atacante y defensor
+    let atacante, defensor;
+    if (esTurnoPar) {
+      atacante = batalla.personajeB;
+      defensor = batalla.personajeA;
+    } else {
+      atacante = batalla.personajeA;
+      defensor = batalla.personajeB;
+    }
 
+    // Verificar que ambos personajes tengan vida
+    if (batalla.personajeA.vida <= 0 || batalla.personajeB.vida <= 0) {
+      batalla.finalizada = true;
+      const ganador = batalla.personajeA.vida > 0 ? batalla.personajeA : batalla.personajeB;
+      batalla.ganador = {
+        id: ganador.id,
+        nombre: ganador.nombre
+      };
+      await batalla.save();
+      
+      return res.status(400).json({ 
+        mensaje: 'La batalla ya ha finalizado',
+        ganador: ganador.nombre
+      });
+    }
+
+    // Calcular daño
     let daño = atacante.ataque;
     let escudoRestante = defensor.escudo;
     let vidaRestante = defensor.vida;
 
+    // Aplicar daño al escudo primero, luego a la vida
     if (escudoRestante > 0) {
       if (daño <= escudoRestante) {
         escudoRestante -= daño;
+        daño = 0; // Todo el daño fue absorbido por el escudo
       } else {
         const dañoRestante = daño - escudoRestante;
         escudoRestante = 0;
         vidaRestante = Math.max(0, vidaRestante - dañoRestante);
+        daño = dañoRestante; // Daño que pasó al escudo
       }
     } else {
       vidaRestante = Math.max(0, vidaRestante - daño);
     }
 
+    // Actualizar estado del defensor
     if (esTurnoPar) {
       batalla.personajeA.escudo = escudoRestante;
       batalla.personajeA.vida = vidaRestante;
@@ -94,6 +123,7 @@ const crearOBatallar = async (req, res) => {
       batalla.personajeB.vida = vidaRestante;
     }
 
+    // Crear objeto del turno
     const turno = {
       numero: turnoNum,
       atacante: {
@@ -104,16 +134,22 @@ const crearOBatallar = async (req, res) => {
         id: defensor.id,
         nombre: defensor.nombre
       },
-      daño,
+      daño: atacante.ataque, // Daño original del atacante
       escudoRestante,
       vidaRestante
     };
 
+    // Agregar turno al array
     batalla.turnos.push(turno);
 
+    // Verificar si hay ganador
     let ganador = null;
     if (vidaRestante <= 0) {
       batalla.finalizada = true;
+      batalla.ganador = {
+        id: atacante.id,
+        nombre: atacante.nombre
+      };
       ganador = atacante.nombre;
     }
 
@@ -121,10 +157,28 @@ const crearOBatallar = async (req, res) => {
 
     res.status(200).json({
       mensaje: ganador ? `¡${ganador} ha ganado la batalla!` : 'Turno ejecutado',
-      personajeA: batalla.personajeA,
-      personajeB: batalla.personajeB,
-      turno,
-      ganador: ganador || null
+      turno: turno.numero,
+      atacante: {
+        nombre: atacante.nombre
+      },
+      defensor: {
+        nombre: defensor.nombre
+      },
+      daño: turno.daño,
+      escudoRestante,
+      vidaRestante,
+      personajeA: {
+        nombre: batalla.personajeA.nombre,
+        vida: batalla.personajeA.vida,
+        escudo: batalla.personajeA.escudo
+      },
+      personajeB: {
+        nombre: batalla.personajeB.nombre,
+        vida: batalla.personajeB.vida,
+        escudo: batalla.personajeB.escudo
+      },
+      ganador: ganador || null,
+      batallaFinalizada: batalla.finalizada
     });
 
   } catch (error) {
@@ -188,28 +242,57 @@ const ejecutarTurno = async (req, res) => {
       });
     }
 
+    // Verificar que ambos personajes tengan vida
+    if (batalla.personajeA.vida <= 0 || batalla.personajeB.vida <= 0) {
+      batalla.finalizada = true;
+      const ganador = batalla.personajeA.vida > 0 ? batalla.personajeA : batalla.personajeB;
+      batalla.ganador = {
+        id: ganador.id,
+        nombre: ganador.nombre
+      };
+      await batalla.save();
+      
+      return res.status(400).json({ 
+        mensaje: 'La batalla ya ha finalizado',
+        ganador: ganador.nombre
+      });
+    }
+
     // Ejecutar turno
     const turnoNum = batalla.turnos.length + 1;
     const esTurnoPar = turnoNum % 2 === 0;
-    let atacante = esTurnoPar ? batalla.personajeB : batalla.personajeA;
-    let defensor = esTurnoPar ? batalla.personajeA : batalla.personajeB;
+    
+    // Determinar atacante y defensor
+    let atacante, defensor;
+    if (esTurnoPar) {
+      atacante = batalla.personajeB;
+      defensor = batalla.personajeA;
+    } else {
+      atacante = batalla.personajeA;
+      defensor = batalla.personajeB;
+    }
 
+    // Calcular daño
     let daño = atacante.ataque;
     let escudoRestante = defensor.escudo;
     let vidaRestante = defensor.vida;
 
+    // Aplicar daño al escudo primero, luego a la vida
     if (escudoRestante > 0) {
       if (daño <= escudoRestante) {
         escudoRestante -= daño;
+        daño = 0; // Todo el daño fue absorbido por el escudo
       } else {
         const dañoRestante = daño - escudoRestante;
         escudoRestante = 0;
         vidaRestante = Math.max(0, vidaRestante - dañoRestante);
+        daño = dañoRestante; // Daño que pasó al escudo
       }
     } else {
       vidaRestante = Math.max(0, vidaRestante - daño);
     }
 
+    // Actualizar estado del defensor
     if (esTurnoPar) {
       batalla.personajeA.escudo = escudoRestante;
       batalla.personajeA.vida = vidaRestante;
@@ -218,6 +301,7 @@ const ejecutarTurno = async (req, res) => {
       batalla.personajeB.vida = vidaRestante;
     }
 
+    // Crear objeto del turno
     const turno = {
       numero: turnoNum,
       atacante: {
@@ -228,13 +312,15 @@ const ejecutarTurno = async (req, res) => {
         id: defensor.id,
         nombre: defensor.nombre
       },
-      daño,
+      daño: atacante.ataque, // Daño original del atacante
       escudoRestante,
       vidaRestante
     };
 
+    // Agregar turno al array
     batalla.turnos.push(turno);
 
+    // Verificar si hay ganador
     let ganador = null;
     if (vidaRestante <= 0) {
       batalla.finalizada = true;
@@ -245,21 +331,44 @@ const ejecutarTurno = async (req, res) => {
       ganador = atacante.nombre;
     }
 
+    // Guardar batalla
     await batalla.save();
 
-    res.status(200).json({
+    // Preparar respuesta
+    const respuesta = {
       mensaje: ganador ? `¡${ganador} ha ganado la batalla!` : 'Turno ejecutado',
       turno: turno.numero,
       atacante: {
         nombre: atacante.nombre
       },
-      personajeA: batalla.personajeA,
-      personajeB: batalla.personajeB,
-      ganador: ganador || null
-    });
+      defensor: {
+        nombre: defensor.nombre
+      },
+      daño: turno.daño,
+      escudoRestante,
+      vidaRestante,
+      personajeA: {
+        nombre: batalla.personajeA.nombre,
+        vida: batalla.personajeA.vida,
+        escudo: batalla.personajeA.escudo
+      },
+      personajeB: {
+        nombre: batalla.personajeB.nombre,
+        vida: batalla.personajeB.vida,
+        escudo: batalla.personajeB.escudo
+      },
+      ganador: ganador || null,
+      batallaFinalizada: batalla.finalizada
+    };
+
+    res.status(200).json(respuesta);
 
   } catch (error) {
-    res.status(500).json({ mensaje: error.message });
+    console.error('Error en ejecutarTurno:', error);
+    res.status(500).json({ 
+      mensaje: 'Error interno del servidor al ejecutar turno',
+      error: error.message 
+    });
   }
 };
 
