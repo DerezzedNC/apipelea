@@ -33,6 +33,8 @@ const elementos = {
 // Inicialización
 document.addEventListener('DOMContentLoaded', async () => {
   console.log('🎮 Iniciando batalla visual KOF...');
+  console.log('Batalla ID:', batallaId);
+  console.log('Token:', token ? 'Presente' : 'Ausente');
   
   if (!batallaId || !token) {
     alert('❌ Error: Faltan datos de batalla. Regresa a la selección.');
@@ -125,6 +127,10 @@ function renderizarPersonajes() {
   
   // Actualizar barras
   actualizarBarras();
+  
+  // Configurar mensaje inicial
+  elementos.mensajeAtaque.textContent = `Turno de ${pA.nombre}. Presiona ESPACIO para atacar`;
+  elementos.turnoActual.textContent = `Preparando batalla...`;
 }
 
 // ===== CONTROLES =====
@@ -203,6 +209,7 @@ async function ejecutarAtaque() {
   
   try {
     console.log(`⚔️ Ejecutando ataque de ${personaje}...`);
+    console.log(`URL: https://apipelea.onrender.com/api/batallas/${batallaId}/turno`);
     
     const response = await fetch(`https://apipelea.onrender.com/api/batallas/${batallaId}/turno`, {
       method: "POST",
@@ -212,7 +219,9 @@ async function ejecutarAtaque() {
       }
     });
 
+    console.log('Response status:', response.status);
     const data = await response.json();
+    console.log('Response data:', data);
 
     if (!response.ok) {
       throw new Error(data.mensaje || 'Error en el ataque');
@@ -235,7 +244,7 @@ async function ejecutarAtaque() {
 function procesarResultadoAtaque(data) {
   console.log('📊 Procesando resultado:', data);
   
-  // Actualizar estado de personajes
+  // Actualizar estado de personajes desde la respuesta del backend
   if (data.personajeA && data.personajeB) {
     estadoJuego.personajes.A.vida = data.personajeA.vida;
     estadoJuego.personajes.A.escudo = data.personajeA.escudo;
@@ -253,7 +262,7 @@ function procesarResultadoAtaque(data) {
   if (data.ganador) {
     finalizarBatalla(data.ganador);
   } else {
-    // Cambiar turno
+    // Cambiar turno automáticamente
     cambiarTurno();
   }
 }
@@ -261,14 +270,16 @@ function procesarResultadoAtaque(data) {
 function mostrarInformacionAtaque(data) {
   const turno = data.turno || 1;
   const atacante = data.atacante?.nombre || 'Desconocido';
-  const daño = data.turno?.daño || 0;
-  const vidaRestante = data.turno?.vidaRestante || 0;
-  const escudoRestante = data.turno?.escudoRestante || 0;
+  const defensor = data.defensor?.nombre || 'Desconocido';
+  const daño = data.daño || 0;
+  const vidaRestante = data.vidaRestante || 0;
+  const escudoRestante = data.escudoRestante || 0;
   
   elementos.turnoActual.textContent = `Turno #${turno} → ${atacante} ataca`;
   
   const detalles = `
     ⚔️ Atacante: ${atacante}
+    🛡️ Defensor: ${defensor}
     💥 Daño: ${daño}
     ❤️ Vida restante: ${vidaRestante}
     🛡️ Escudo restante: ${escudoRestante}
