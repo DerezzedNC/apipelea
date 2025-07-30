@@ -33,8 +33,8 @@ async function cargarPersonajes() {
         <p>${p.nombre}</p>
         <small>HP: ${p.vida} | ATK: ${p.ataque} | DEF: ${p.defensa} | ESC: ${p.escudo || 0}</small>
         <div class="botones-seleccion">
-          <button onclick="seleccionar('A', '${p._id}', '${p.nombre}', this)">Elegir para A</button>
-          <button onclick="seleccionar('B', '${p._id}', '${p.nombre}', this)">Elegir para B</button>
+          <button class="btn-seleccion" data-equipo="A" data-id="${p._id}" data-nombre="${p.nombre}">Elegir para A</button>
+          <button class="btn-seleccion" data-equipo="B" data-id="${p._id}" data-nombre="${p.nombre}">Elegir para B</button>
         </div>
       `;
       panel.appendChild(div);
@@ -179,6 +179,16 @@ document.addEventListener('DOMContentLoaded', function() {
   if (botonTurno) {
     botonTurno.addEventListener('click', ejecutarTurno1vs1);
   }
+  
+  // Event listeners para botones de selección de personajes
+  document.addEventListener('click', function(e) {
+    if (e.target.classList.contains('btn-seleccion')) {
+      const equipo = e.target.dataset.equipo;
+      const id = e.target.dataset.id;
+      const nombre = e.target.dataset.nombre;
+      seleccionar(equipo, id, nombre, e.target);
+    }
+  });
   
   // Inicializar
   cargarPersonajes();

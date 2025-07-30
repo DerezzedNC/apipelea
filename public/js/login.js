@@ -1,5 +1,13 @@
 // ===== LOGIN.JS - AUTENTICACIÓN DE USUARIOS =====
 
+document.addEventListener('DOMContentLoaded', function() {
+  const loginBtn = document.getElementById('loginBtn');
+  
+  if (loginBtn) {
+    loginBtn.addEventListener('click', login);
+  }
+});
+
 async function login() {
   const username = document.getElementById('username').value;
   const password = document.getElementById('password').value;

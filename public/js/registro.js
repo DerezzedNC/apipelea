@@ -1,5 +1,13 @@
 // ===== REGISTRO.JS - REGISTRO DE USUARIOS =====
 
+document.addEventListener('DOMContentLoaded', function() {
+  const registrarBtn = document.getElementById('registrarBtn');
+  
+  if (registrarBtn) {
+    registrarBtn.addEventListener('click', registrar);
+  }
+});
+
 async function registrar() {
   const nombre = document.getElementById('nombre').value;
   const password = document.getElementById('password').value;
