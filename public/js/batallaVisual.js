@@ -12,10 +12,12 @@ async function ejecutarTurno() {
 
   try {
     const response = await fetch(`https://apipelea.onrender.com/api/batallas/${batallaId}/turno`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" }
-    });
-
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": `Bearer ${localStorage.getItem("token")}`
+        }
+      });
     const data = await response.json();
 
     document.getElementById("turnoActual").textContent = `Turno #${data.turno} → Ataca: ${data.atacante.nombre}`;
