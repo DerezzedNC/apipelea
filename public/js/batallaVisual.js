@@ -14,7 +14,8 @@ let estadoJuego = {
   controlesActivos: true,
   posicionA: 0, // Posición del personaje A (-50 a 50)
   posicionB: 0, // Posición del personaje B (-50 a 50)
-  teclasPresionadas: new Set()
+  teclasPresionadas: new Set(),
+  turnoActual: 1
 };
 
 // Elementos del DOM
@@ -35,6 +36,8 @@ document.addEventListener('DOMContentLoaded', async () => {
   console.log('🎮 Iniciando batalla visual KOF...');
   console.log('Batalla ID:', batallaId);
   console.log('Token:', token ? 'Presente' : 'Ausente');
+  console.log('Personaje A:', personajeA);
+  console.log('Personaje B:', personajeB);
   
   if (!batallaId || !token) {
     alert('❌ Error: Faltan datos de batalla. Regresa a la selección.');
@@ -79,7 +82,7 @@ async function inicializarBatalla() {
         nombre: pA.nombre,
         vida: pA.vida,
         ataque: pA.ataque,
-        defensa: pA.defensa,
+        defensa: pA.defensa || 0,
         escudo: pA.escudo || 0,
         imagen: pA.imagen || '🥷'
       },
@@ -88,7 +91,7 @@ async function inicializarBatalla() {
         nombre: pB.nombre,
         vida: pB.vida,
         ataque: pB.ataque,
-        defensa: pB.defensa,
+        defensa: pB.defensa || 0,
         escudo: pB.escudo || 0,
         imagen: pB.imagen || '👹'
       }
@@ -198,7 +201,10 @@ function moverPersonaje(tecla) {
 // ===== ATAQUES Y TURNOS =====
 
 async function ejecutarAtaque() {
-  if (estadoJuego.batallaFinalizada) return;
+  if (estadoJuego.batallaFinalizada) {
+    console.log('❌ Batalla ya finalizada');
+    return;
+  }
   
   const personaje = estadoJuego.personajeActivo;
   const sprite = personaje === 'A' ? elementos.spriteA : elementos.spriteB;
@@ -224,6 +230,13 @@ async function ejecutarAtaque() {
     console.log('Response data:', data);
 
     if (!response.ok) {
+      if (data.mensaje && data.mensaje.includes('finalizada')) {
+        console.log('🏆 Batalla finalizada:', data.mensaje);
+        if (data.ganador) {
+          finalizarBatalla(data.ganador);
+        }
+        return;
+      }
       throw new Error(data.mensaje || 'Error en el ataque');
     }
 
@@ -268,7 +281,7 @@ function procesarResultadoAtaque(data) {
 }
 
 function mostrarInformacionAtaque(data) {
-  const turno = data.turno || 1;
+  const turno = data.turno || estadoJuego.turnoActual;
   const atacante = data.atacante?.nombre || 'Desconocido';
   const defensor = data.defensor?.nombre || 'Desconocido';
   const daño = data.daño || 0;
@@ -293,6 +306,7 @@ function mostrarInformacionAtaque(data) {
 
 function cambiarTurno() {
   estadoJuego.personajeActivo = estadoJuego.personajeActivo === 'A' ? 'B' : 'A';
+  estadoJuego.turnoActual++;
   actualizarIndicadoresTurno();
   
   const personaje = estadoJuego.personajes[estadoJuego.personajeActivo];
