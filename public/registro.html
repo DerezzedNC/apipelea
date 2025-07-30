@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Registro</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body class="fondo-arcade">
+  <div class="contenedor-login">
+    <h1 class="titulo">REGISTRO</h1>
+    
+    <label for="nombre">Nombre de Usuario</label>
+    <input type="text" id="nombre" placeholder="Nombre de usuario">
+
+    <label for="password">Contraseña</label>
+    <input type="password" id="password" placeholder="Contraseña">
+
+    <label for="rol">Rol</label>
+    <select id="rol">
+      <option value="">Selecciona un rol</option>
+      <option value="usuario">Usuario</option>
+      <option value="admin">Administrador</option>
+    </select>
+
+    <button onclick="registrar()">Registrar</button>
+    <a href="login.html" class="registro-link">¿Ya tienes cuenta? Inicia sesión aquí</a>
+  </div>
+
+  <script>
+    async function registrar() {
+      const nombre = document.getElementById('nombre').value;
+      const password = document.getElementById('password').value;
+      const rol = document.getElementById('rol').value;
+
+      if (!nombre || !password || !rol) {
+        alert("Completa todos los campos");
+        return;
+      }
+
+      try {
+        const response = await fetch('https://apipelea.onrender.com/api/auth/register', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({ nombre, password, rol })
+        });
+
+        const data = await response.json();
+
+        if (response.ok) {
+          alert("Usuario registrado correctamente");
+          window.location.href = "login.html";
+        } else {
+          alert(data.mensaje || "Error al registrar usuario");
+        }
+      } catch (error) {
+        alert("Error al conectar con el servidor");
+        console.error(error);
+      }
+    }
+  </script>
+</body>
+</html> 

@@ -2,81 +2,58 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Batalla 3vs3 - Login</title>
-  <link rel="stylesheet" href="style.css" />
-  <style>
-    body {
-      background: url('https://www.transparenttextures.com/patterns/linen.png');
-      font-family: 'Arial Black', sans-serif;
-      color: #fff;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      height: 100vh;
-      margin: 0;
-    }
-
-    h1 {
-      font-size: 2.5em;
-      color: #00ffcc;
-      text-shadow: 2px 2px 0 #000;
-      margin-bottom: 20px;
-    }
-
-    form {
-      background-color: #003921;
-      padding: 40px;
-      border-radius: 15px;
-      box-shadow: 0 0 30px #0aff8a;
-      display: flex;
-      flex-direction: column;
-      gap: 15px;
-      width: 300px;
-    }
-
-    input {
-      padding: 10px;
-      border: none;
-      border-radius: 8px;
-      font-size: 1em;
-    }
-
-    button {
-      background-color: #0aff8a;
-      color: #001e12;
-      padding: 12px;
-      font-size: 1.2em;
-      font-weight: bold;
-      border: none;
-      border-radius: 10px;
-      cursor: pointer;
-    }
-
-    button:hover {
-      background-color: #00e67a;
-    }
-
-    #mensaje-error {
-      color: #ff4c4c;
-      font-weight: bold;
-      text-align: center;
-      display: none;
-    }
-  </style>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Login</title>
+  <link rel="stylesheet" href="estilos.css">
 </head>
-<body>
-  <h1>🔥 BATALLA 3VS3 🔥</h1>
+<body class="fondo-arcade">
+  <div class="contenedor-login">
+    <h1 class="titulo">LOGIN</h1>
+    
+    <label for="username">Usuario</label>
+    <input type="text" id="username" placeholder="Nombre de usuario">
 
-  <!-- 🛠️ Fijate en el id agregado -->
-  <form id="form-login">
-    <input type="text" id="usuario" placeholder="Nombre de usuario" required />
-    <input type="password" id="password" placeholder="Contraseña" required />
-    <button type="submit">ENTRAR</button>
-    <div id="mensaje-error"></div>
-  </form>
+    <label for="password">Contraseña</label>
+    <input type="password" id="password" placeholder="Contraseña">
 
-  <script src="js/login.js"></script>
+    <button onclick="login()">Iniciar Sesión</button>
+    <button onclick="window.location.href='crear-usuario.html'">Crear Usuario</button>
+    <a href="registro.html" class="registro-link">¿No tienes cuenta? Regístrate aquí</a>
+  </div>
+
+  <script>
+    async function login() {
+      const username = document.getElementById('username').value;
+      const password = document.getElementById('password').value;
+
+      if (!username || !password) {
+        alert("Completa ambos campos");
+        return;
+      }
+
+      try {
+        const response = await fetch('https://apipelea.onrender.com/api/auth/login', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({ nombre: username, password: password })
+        });
+
+        const data = await response.json();
+
+        if (response.ok && data.token) {
+          localStorage.setItem("token", data.token);
+          alert("Inicio de sesión exitoso");
+          window.location.href = "modo.html";
+        } else {
+          alert("Credenciales inválidas");
+        }
+      } catch (error) {
+        alert("Error al conectar con el servidor");
+        console.error(error);
+      }
+    }
+  </script>
 </body>
 </html>
