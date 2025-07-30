@@ -1,5 +1,5 @@
 const personajesContainer = document.getElementById("gridPersonajes");
-const confirmarBtn = document.getElementById("confirmarBtn");
+const confirmarBtn = document.getElementById("crearBatallaBtn");
 const boxA = document.getElementById("boxA");
 const boxB = document.getElementById("boxB");
 
@@ -120,5 +120,7 @@ confirmarBtn.addEventListener("click", async () => {
 });
 
 // ✅ 5. Inicializar
-cargarPersonajes();
+document.addEventListener('DOMContentLoaded', function() {
+  cargarPersonajes();
+});
 
