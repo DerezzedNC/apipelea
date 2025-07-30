@@ -22,13 +22,16 @@ async function cargarPersonajes() {
     const panel = document.getElementById("personajes");
     panel.innerHTML = ''; // Limpiar contenedor
 
-    personajesData.forEach((p) => {
+    // Limitar a los primeros 10 personajes
+    const personajesLimitados = personajesData.slice(0, 10);
+    
+    personajesLimitados.forEach((p) => {
       const div = document.createElement("div");
       div.classList.add("personaje");
       div.innerHTML = `
         <img src="${p.imagen || 'https://via.placeholder.com/80'}" alt="${p.nombre}" />
         <p>${p.nombre}</p>
-        <small>HP: ${p.vida} | ATK: ${p.ataque} | DEF: ${p.defensa}</small>
+        <small>HP: ${p.vida} | ATK: ${p.ataque} | DEF: ${p.defensa} | ESC: ${p.escudo || 0}</small>
         <div class="botones-seleccion">
           <button onclick="seleccionar('A', '${p._id}', '${p.nombre}', this)">Elegir para A</button>
           <button onclick="seleccionar('B', '${p._id}', '${p.nombre}', this)">Elegir para B</button>
@@ -45,7 +48,12 @@ async function cargarPersonajes() {
 
 // ✅ 2. Selección de personajes
 function seleccionar(equipo, id, nombre, button) {
+  // Verificar si el personaje ya está seleccionado en el otro equipo
   if (equipo === 'A') {
+    if (personajeBId === id) {
+      alert("Este personaje ya está seleccionado para el Jugador B");
+      return;
+    }
     personajeAId = id;
     document.getElementById("equipoA").innerHTML = `
       <div class="personaje-seleccionado">
@@ -60,6 +68,10 @@ function seleccionar(equipo, id, nombre, button) {
     button.style.background = '#00ff88';
     button.style.color = '#000';
   } else {
+    if (personajeAId === id) {
+      alert("Este personaje ya está seleccionado para el Jugador A");
+      return;
+    }
     personajeBId = id;
     document.getElementById("equipoB").innerHTML = `
       <div class="personaje-seleccionado">
@@ -149,11 +161,11 @@ function mostrarResultado(data) {
     <div style="display: flex; justify-content: space-around; margin: 20px 0;">
       <div style="background: #004422; padding: 15px; border-radius: 10px; border: 2px solid #00ff88;">
         <strong style="color: #00ff88;">${data.personajeA?.nombre || 'Jugador A'}</strong><br>
-        <small>Vida: ${data.personajeA?.vida || 0} | Defensa: ${data.personajeA?.defensa || 0}</small>
+        <small>Vida: ${data.personajeA?.vida || 0} | Defensa: ${data.personajeA?.defensa || 0} | Escudo: ${data.personajeA?.escudo || 0}</small>
       </div>
       <div style="background: #442200; padding: 15px; border-radius: 10px; border: 2px solid #ffaa00;">
         <strong style="color: #ffaa00;">${data.personajeB?.nombre || 'Jugador B'}</strong><br>
-        <small>Vida: ${data.personajeB?.vida || 0} | Defensa: ${data.personajeB?.defensa || 0}</small>
+        <small>Vida: ${data.personajeB?.vida || 0} | Defensa: ${data.personajeB?.defensa || 0} | Escudo: ${data.personajeB?.escudo || 0}</small>
       </div>
     </div>
     <p style="text-align: center; color: #ffcc00;"><em>Turno actual: ${data.turno || 'N/A'}</em></p>

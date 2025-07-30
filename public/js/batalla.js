@@ -26,13 +26,16 @@ async function cargarPersonajes() {
 
     personajesContainer.innerHTML = ''; // Limpiar contenedor
 
-    personajesData.forEach(p => {
+    // Limitar a los primeros 10 personajes
+    const personajesLimitados = personajesData.slice(0, 10);
+    
+    personajesLimitados.forEach(p => {
       const div = document.createElement("div");
       div.classList.add("personaje");
       div.innerHTML = `
         <img src="${p.imagen || 'https://via.placeholder.com/80'}" alt="${p.nombre}" />
         <p>${p.nombre}</p>
-        <small>HP: ${p.vida} | ATK: ${p.ataque} | DEF: ${p.defensa}</small>
+        <small>HP: ${p.vida} | ATK: ${p.ataque} | DEF: ${p.defensa} | ESC: ${p.escudo || 0}</small>
       `;
       div.addEventListener("click", () => seleccionar(p._id, div, p));
       personajesContainer.appendChild(div);
@@ -45,12 +48,24 @@ async function cargarPersonajes() {
 
 // ✅ 2. Seleccionar personajes
 function seleccionar(id, div, personaje) {
+  // Verificar si el personaje ya está seleccionado en el otro equipo
+  const yaEnTeamA = seleccionTeamA.some(p => p.id === id);
+  const yaEnTeamB = seleccionTeamB.some(p => p.id === id);
+  
   if (turno === "A" && seleccionTeamA.length < 3) {
+    if (yaEnTeamB) {
+      alert("Este personaje ya está seleccionado en el Team B");
+      return;
+    }
     seleccionTeamA.push({ id, personaje });
     div.classList.add("team-a");
     mostrarPersonajeEnEquipo(boxA, personaje, seleccionTeamA.length);
     if (seleccionTeamA.length === 3) turno = "B";
   } else if (turno === "B" && seleccionTeamB.length < 3) {
+    if (yaEnTeamA) {
+      alert("Este personaje ya está seleccionado en el Team A");
+      return;
+    }
     seleccionTeamB.push({ id, personaje });
     div.classList.add("team-b");
     mostrarPersonajeEnEquipo(boxB, personaje, seleccionTeamB.length);
@@ -63,7 +78,7 @@ function mostrarPersonajeEnEquipo(container, personaje, posicion) {
   div.classList.add("personaje-seleccionado");
   div.innerHTML = `
     <strong>${posicion}. ${personaje.nombre}</strong><br>
-    <small>HP: ${personaje.vida} | ATK: ${personaje.ataque} | DEF: ${personaje.defensa}</small>
+    <small>HP: ${personaje.vida} | ATK: ${personaje.ataque} | DEF: ${personaje.defensa} | ESC: ${personaje.escudo || 0}</small>
   `;
   container.appendChild(div);
 }

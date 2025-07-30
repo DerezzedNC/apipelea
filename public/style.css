@@ -68,13 +68,24 @@ button:hover {
 .registro-link {
   display: block;
   margin-top: 15px;
-  color: #00ff88;
-  text-decoration: none;
+  padding: 12px;
+  background: #00cc66;
+  border: none;
+  border-radius: 10px;
+  color: #fff;
   font-weight: bold;
+  font-size: 1.1em;
+  cursor: pointer;
+  transition: 0.3s;
+  box-shadow: 2px 2px #000;
+  text-decoration: none;
+  text-align: center;
 }
 
 .registro-link:hover {
-  text-decoration: underline;
+  background: #00ff88;
+  color: #000;
+  text-decoration: none;
 }
 
 /* Estilos para páginas de batalla */

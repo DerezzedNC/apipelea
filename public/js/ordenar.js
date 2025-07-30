@@ -62,7 +62,7 @@ document.addEventListener("DOMContentLoaded", () => {
         div.className = "personaje-seleccionado";
         div.innerHTML = `
           <strong>${personaje.nombre}</strong><br>
-          <small>HP: ${personaje.vida} | ATK: ${personaje.ataque} | DEF: ${personaje.defensa}</small>
+          <small>HP: ${personaje.vida} | ATK: ${personaje.ataque} | DEF: ${personaje.defensa} | ESC: ${personaje.escudo || 0}</small>
         `;
         div.dataset.id = personajeId;
         div.dataset.index = index;
