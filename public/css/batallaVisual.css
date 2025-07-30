@@ -1,71 +1,554 @@
-body.fondo-arcade {
-    background: linear-gradient(to bottom right, #000000, #003300);
-    font-family: 'Courier New', monospace;
-    color: #ffffff;
-    margin: 0;
-    padding: 20px;
+/* ===== ESTILOS KING OF FIGHTERS ===== */
+
+/* Variables CSS */
+:root {
+  --color-fondo: #0a0a0a;
+  --color-neon-verde: #00ff41;
+  --color-neon-naranja: #ff6b35;
+  --color-neon-azul: #00d4ff;
+  --color-neon-rojo: #ff0040;
+  --color-neon-amarillo: #ffff00;
+  --color-texto: #ffffff;
+  --color-sombra: rgba(0, 255, 65, 0.3);
+  --gradiente-kof: linear-gradient(135deg, #1a1a1a 0%, #0a0a0a 50%, #1a1a1a 100%);
+}
+
+/* Reset y estilos base */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Courier New', monospace;
+  background: var(--color-fondo);
+  color: var(--color-texto);
+  overflow: hidden;
+  height: 100vh;
+}
+
+/* Fondo tipo KOF */
+.fondo-kof {
+  background: var(--gradiente-kof);
+  position: relative;
+}
+
+.fondo-kof::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: 
+    radial-gradient(circle at 20% 50%, rgba(0, 255, 65, 0.1) 0%, transparent 50%),
+    radial-gradient(circle at 80% 50%, rgba(255, 107, 53, 0.1) 0%, transparent 50%);
+  pointer-events: none;
+}
+
+/* Contenedor principal */
+.contenedor-batalla {
+  position: relative;
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  z-index: 1;
+}
+
+/* Header de la batalla */
+.header-batalla {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px 40px;
+  background: linear-gradient(90deg, rgba(0, 255, 65, 0.2), rgba(255, 107, 53, 0.2));
+  border-bottom: 2px solid var(--color-neon-verde);
+  box-shadow: 0 0 20px var(--color-sombra);
+}
+
+.titulo-kof {
+  font-size: 2.5rem;
+  font-weight: bold;
+  text-shadow: 
+    0 0 10px var(--color-neon-verde),
+    0 0 20px var(--color-neon-verde),
+    0 0 30px var(--color-neon-verde);
+  animation: tituloPulse 2s ease-in-out infinite alternate;
+}
+
+@keyframes tituloPulse {
+  0% { text-shadow: 0 0 10px var(--color-neon-verde), 0 0 20px var(--color-neon-verde); }
+  100% { text-shadow: 0 0 20px var(--color-neon-verde), 0 0 30px var(--color-neon-verde), 0 0 40px var(--color-neon-verde); }
+}
+
+.turno-texto {
+  font-size: 1.2rem;
+  color: var(--color-neon-amarillo);
+  text-shadow: 0 0 10px var(--color-neon-amarillo);
+  font-weight: bold;
+}
+
+/* Escenario de pelea */
+.escenario-kof {
+  flex: 1;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px 40px;
+  position: relative;
+  min-height: 60vh;
+}
+
+/* Contenedor de personaje */
+.personaje-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 45%;
+  height: 100%;
+  position: relative;
+}
+
+/* Información del personaje */
+.info-personaje {
+  text-align: center;
+  margin-bottom: 20px;
+  background: rgba(0, 0, 0, 0.8);
+  padding: 15px;
+  border-radius: 10px;
+  border: 2px solid var(--color-neon-verde);
+  box-shadow: 0 0 15px var(--color-sombra);
+}
+
+.nombre-personaje {
+  font-size: 1.5rem;
+  font-weight: bold;
+  color: var(--color-neon-verde);
+  text-shadow: 0 0 10px var(--color-neon-verde);
+  margin-bottom: 10px;
+}
+
+.stats {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 10px;
+}
+
+.stat {
+  font-size: 0.9rem;
+  color: var(--color-texto);
+  background: rgba(0, 255, 65, 0.1);
+  padding: 5px 10px;
+  border-radius: 5px;
+  border: 1px solid var(--color-neon-verde);
+}
+
+/* Barras de vida y escudo */
+.barras-vida {
+  width: 100%;
+  margin-bottom: 20px;
+}
+
+.barra-vida, .barra-escudo {
+  margin-bottom: 10px;
+  position: relative;
+}
+
+.barra-fondo {
+  width: 100%;
+  height: 25px;
+  background: rgba(255, 255, 255, 0.1);
+  border: 2px solid var(--color-neon-verde);
+  border-radius: 15px;
+  overflow: hidden;
+  position: relative;
+}
+
+.barra-progreso {
+  height: 100%;
+  background: linear-gradient(90deg, var(--color-neon-verde), var(--color-neon-azul));
+  border-radius: 13px;
+  transition: width 0.5s ease-in-out;
+  box-shadow: 0 0 10px var(--color-sombra);
+}
+
+.barra-progreso#escudoA,
+.barra-progreso#escudoB {
+  background: linear-gradient(90deg, var(--color-neon-amarillo), var(--color-neon-naranja));
+}
+
+.vida-texto, .escudo-texto {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 0.8rem;
+  font-weight: bold;
+  color: var(--color-texto);
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.8);
+}
+
+/* Sprite del personaje */
+.sprite-personaje {
+  position: relative;
+  width: 200px;
+  height: 300px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.personaje-sprite {
+  width: 150px;
+  height: 200px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  transition: transform 0.3s ease;
+}
+
+.personaje-imagen {
+  font-size: 8rem;
+  filter: drop-shadow(0 0 20px var(--color-neon-verde));
+  transition: all 0.3s ease;
+}
+
+/* Indicador de turno */
+.indicador-turno {
+  position: absolute;
+  top: -20px;
+  font-size: 2rem;
+  color: var(--color-neon-amarillo);
+  text-shadow: 0 0 10px var(--color-neon-amarillo);
+  animation: indicadorPulse 1s ease-in-out infinite alternate;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.indicador-turno.activo {
+  opacity: 1;
+}
+
+@keyframes indicadorPulse {
+  0% { transform: scale(1); }
+  100% { transform: scale(1.2); }
+}
+
+/* VS en el centro */
+.vs-container {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 10;
+}
+
+.vs-texto {
+  font-size: 4rem;
+  font-weight: bold;
+  color: var(--color-neon-rojo);
+  text-shadow: 
+    0 0 20px var(--color-neon-rojo),
+    0 0 40px var(--color-neon-rojo);
+  animation: vsPulse 2s ease-in-out infinite alternate;
+}
+
+@keyframes vsPulse {
+  0% { transform: translate(-50%, -50%) scale(1); }
+  100% { transform: translate(-50%, -50%) scale(1.1); }
+}
+
+.vs-efecto {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 100px;
+  height: 100px;
+  border: 3px solid var(--color-neon-rojo);
+  border-radius: 50%;
+  animation: vsRotate 3s linear infinite;
+}
+
+@keyframes vsRotate {
+  0% { transform: translate(-50%, -50%) rotate(0deg); }
+  100% { transform: translate(-50%, -50%) rotate(360deg); }
+}
+
+/* Panel de combate */
+.panel-combate {
+  padding: 20px 40px;
+  background: rgba(0, 0, 0, 0.9);
+  border-top: 2px solid var(--color-neon-verde);
+  box-shadow: 0 0 20px var(--color-sombra);
+}
+
+.info-ataque {
+  text-align: center;
+  margin-bottom: 15px;
+}
+
+.mensaje-ataque {
+  font-size: 1.2rem;
+  color: var(--color-neon-amarillo);
+  text-shadow: 0 0 10px var(--color-neon-amarillo);
+  margin-bottom: 10px;
+}
+
+.detalles-ataque {
+  font-size: 1rem;
+  color: var(--color-texto);
+  background: rgba(0, 255, 65, 0.1);
+  padding: 10px;
+  border-radius: 5px;
+  border: 1px solid var(--color-neon-verde);
+  min-height: 40px;
+}
+
+.controles {
+  text-align: center;
+}
+
+.control-info {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 15px;
+  flex-wrap: wrap;
+}
+
+.control-texto {
+  font-size: 1rem;
+  color: var(--color-texto);
+}
+
+.control-tecla {
+  background: var(--color-neon-verde);
+  color: var(--color-fondo);
+  padding: 5px 10px;
+  border-radius: 5px;
+  font-weight: bold;
+  font-size: 0.9rem;
+}
+
+.control-desc {
+  font-size: 0.9rem;
+  color: var(--color-texto);
+}
+
+/* Modal de victoria */
+.modal-victoria {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.9);
+  display: none;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.modal-victoria.mostrar {
+  display: flex;
+}
+
+.modal-contenido {
+  background: var(--gradiente-kof);
+  border: 3px solid var(--color-neon-verde);
+  border-radius: 20px;
+  padding: 40px;
+  text-align: center;
+  box-shadow: 0 0 50px var(--color-sombra);
+  animation: modalEntrada 0.5s ease-out;
+}
+
+@keyframes modalEntrada {
+  0% { transform: scale(0.5); opacity: 0; }
+  100% { transform: scale(1); opacity: 1; }
+}
+
+.titulo-victoria {
+  font-size: 3rem;
+  color: var(--color-neon-amarillo);
+  text-shadow: 0 0 20px var(--color-neon-amarillo);
+  margin-bottom: 30px;
+  animation: victoriaPulse 1s ease-in-out infinite alternate;
+}
+
+@keyframes victoriaPulse {
+  0% { text-shadow: 0 0 20px var(--color-neon-amarillo); }
+  100% { text-shadow: 0 0 30px var(--color-neon-amarillo), 0 0 40px var(--color-neon-amarillo); }
+}
+
+.ganador-info {
+  margin-bottom: 30px;
+}
+
+.ganador-nombre {
+  font-size: 2.5rem;
+  color: var(--color-neon-verde);
+  text-shadow: 0 0 15px var(--color-neon-verde);
+  margin-bottom: 15px;
+  font-weight: bold;
+}
+
+.ganador-efecto {
+  font-size: 3rem;
+  animation: ganadorEfecto 2s ease-in-out infinite;
+}
+
+@keyframes ganadorEfecto {
+  0%, 100% { transform: rotate(0deg) scale(1); }
+  50% { transform: rotate(180deg) scale(1.2); }
+}
+
+.btn-nueva-batalla, .btn-volver {
+  background: var(--color-neon-verde);
+  color: var(--color-fondo);
+  border: none;
+  padding: 15px 30px;
+  margin: 10px;
+  border-radius: 10px;
+  font-size: 1.1rem;
+  font-weight: bold;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 0 15px var(--color-sombra);
+}
+
+.btn-nueva-batalla:hover, .btn-volver:hover {
+  background: var(--color-neon-amarillo);
+  transform: scale(1.05);
+  box-shadow: 0 0 25px var(--color-neon-amarillo);
+}
+
+.btn-volver {
+  background: var(--color-neon-naranja);
+}
+
+.btn-volver:hover {
+  background: var(--color-neon-rojo);
+}
+
+/* Efectos de partículas */
+.particulas {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 5;
+}
+
+/* Animaciones de movimiento */
+.personaje-sprite.moviendo {
+  animation: movimiento 0.3s ease-in-out;
+}
+
+@keyframes movimiento {
+  0%, 100% { transform: translateX(0); }
+  50% { transform: translateX(10px); }
+}
+
+.personaje-sprite.atacando {
+  animation: ataque 0.5s ease-in-out;
+}
+
+@keyframes ataque {
+  0% { transform: scale(1); }
+  25% { transform: scale(1.1) translateX(20px); }
+  50% { transform: scale(1.2) translateX(30px); }
+  75% { transform: scale(1.1) translateX(20px); }
+  100% { transform: scale(1); }
+}
+
+.personaje-sprite.defendiendo {
+  animation: defensa 0.3s ease-in-out;
+}
+
+@keyframes defensa {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(0.9); }
+}
+
+/* Efectos de daño */
+.personaje-sprite.recibiendo-dano {
+  animation: recibirDano 0.5s ease-in-out;
+}
+
+@keyframes recibirDano {
+  0%, 100% { 
+    transform: scale(1);
+    filter: brightness(1);
+  }
+  25%, 75% { 
+    transform: scale(1.05);
+    filter: brightness(1.5) hue-rotate(0deg);
+  }
+  50% { 
+    transform: scale(1.1);
+    filter: brightness(2) hue-rotate(180deg);
+  }
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .escenario-kof {
+    flex-direction: column;
+    padding: 10px;
   }
   
-  .titulo {
-    text-align: center;
-    color: #00ff88;
-    font-size: 2em;
-    margin-bottom: 20px;
-  }
-  
-  .contenedor-batalla {
-    max-width: 800px;
-    margin: auto;
-    padding: 20px;
-    background: #111;
-    border: 2px solid #00ff88;
-    border-radius: 10px;
-    box-shadow: 0 0 20px #00ff88;
-  }
-  
-  .escenario {
-    display: flex;
-    justify-content: space-around;
-    margin-bottom: 20px;
-  }
-  
-  .personaje {
-    text-align: center;
-    width: 40%;
-  }
-  
-  .vida {
-    background: #333;
-    border: 1px solid #00ff88;
-    height: 20px;
-    border-radius: 10px;
-    overflow: hidden;
-    margin-top: 5px;
-  }
-  
-  .barra {
-    background: #00ff88;
-    height: 100%;
+  .personaje-container {
     width: 100%;
-    transition: width 0.3s ease;
+    height: auto;
+    margin-bottom: 20px;
   }
   
-  .acciones {
-    text-align: center;
+  .titulo-kof {
+    font-size: 1.8rem;
   }
   
-  .acciones button {
-    padding: 10px 20px;
-    background: #ffaa00;
-    border: none;
-    color: #000;
-    font-size: 1.1em;
-    border-radius: 5px;
-    cursor: pointer;
-    transition: background 0.2s ease;
+  .vs-texto {
+    font-size: 2.5rem;
   }
   
-  .acciones button:hover {
-    background: #ffcc00;
+  .personaje-imagen {
+    font-size: 4rem;
   }
+}
+
+/* Efectos de neón adicionales */
+.neon-efecto {
+  box-shadow: 
+    0 0 5px var(--color-neon-verde),
+    0 0 10px var(--color-neon-verde),
+    0 0 15px var(--color-neon-verde),
+    0 0 20px var(--color-neon-verde);
+}
+
+/* Scroll personalizado */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--color-fondo);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--color-neon-verde);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--color-neon-amarillo);
+}
   
