@@ -8,7 +8,8 @@ async function cargarPersonajes() {
   try {
     const response = await fetch("https://apipelea.onrender.com/api/personajes", {
       headers: {
-        Authorization: `Bearer ${localStorage.getItem("token")}`
+        'Authorization': `Bearer ${localStorage.getItem("token")}`,
+        'Content-Type': 'application/json'
       }
     });
 
