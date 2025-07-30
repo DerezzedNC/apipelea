@@ -54,7 +54,8 @@ crearBatallaBtn.addEventListener("click", async () => {
   }
 
   try {
-    const res = await fetch("https://apipelea.onrender.com/api/batallas", {
+    // ✅ Usar el endpoint correcto para crear batallas 1vs1
+    const res = await fetch("https://apipelea.onrender.com/api/batallas/1vs1", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -77,7 +78,16 @@ crearBatallaBtn.addEventListener("click", async () => {
       // ✅ Redirigir al escenario visual
       window.location.href = "batallaVisual.html";
     } else {
-      alert(result.mensaje || result.message || "Error al crear batalla");
+      // ✅ Manejar diferentes tipos de errores
+      if (result.batallaId) {
+        // Si ya existe una batalla, usar esa
+        localStorage.setItem("batallaId", result.batallaId);
+        localStorage.setItem("personajeA", teamA.id);
+        localStorage.setItem("personajeB", teamB.id);
+        window.location.href = "batallaVisual.html";
+      } else {
+        alert(result.mensaje || result.message || "Error al crear batalla");
+      }
     }
   } catch (error) {
     console.error("Error al crear batalla", error);

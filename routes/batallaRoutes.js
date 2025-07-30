@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const { crearOBatallar, resumenBatallas } = require('../controllers/batallaController');
+const { crearOBatallar, resumenBatallas, ejecutarTurno } = require('../controllers/batallaController');
 const authMiddleware = require('../middlewares/authMiddleware');
 const verificarRol = require('../middlewares/verificarRol');
 
@@ -62,5 +62,35 @@ router.post('/1vs1', authMiddleware, verificarRol(['admin', 'usuario']), crearOB
  *         description: Token inválido
  */
 router.get('/', authMiddleware, verificarRol(['admin', 'usuario']), resumenBatallas);
+
+/**
+ * @swagger
+ * /api/batallas/{id}/turno:
+ *   post:
+ *     summary: Ejecuta un turno específico de una batalla
+ *     tags:
+ *       - Batallas 1vs1
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: ID de la batalla
+ *     responses:
+ *       200:
+ *         description: Turno ejecutado exitosamente
+ *       400:
+ *         description: Error de validación o batalla finalizada
+ *       401:
+ *         description: Token requerido
+ *       403:
+ *         description: Token inválido o sin permisos
+ *       404:
+ *         description: Batalla no encontrada
+ */
+router.post('/:id/turno', authMiddleware, verificarRol(['admin', 'usuario']), ejecutarTurno);
 
 module.exports = router;

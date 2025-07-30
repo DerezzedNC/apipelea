@@ -160,7 +160,111 @@ const resumenBatallas = async (req, res) => {
   }
 };
 
+// POST /api/batallas/:id/turno - Ejecutar turno específico
+const ejecutarTurno = async (req, res) => {
+  try {
+    const { id } = req.params;
+    
+    if (!mongoose.Types.ObjectId.isValid(id)) {
+      return res.status(400).json({ mensaje: 'ID de batalla inválido' });
+    }
+
+    const batalla = await Batalla.findById(id);
+    
+    if (!batalla) {
+      return res.status(404).json({ mensaje: 'Batalla no encontrada' });
+    }
+
+    // Verificar que el usuario sea el propietario de la batalla
+    if (batalla.userId.toString() !== req.user.id && req.user.rol !== 'admin') {
+      return res.status(403).json({ mensaje: 'No tienes permisos para esta batalla' });
+    }
+
+    // Verificar si la batalla ya está finalizada
+    if (batalla.finalizada) {
+      return res.status(400).json({ 
+        mensaje: 'La batalla ya ha finalizado',
+        ganador: batalla.ganador?.nombre || 'Sin ganador'
+      });
+    }
+
+    // Ejecutar turno
+    const turnoNum = batalla.turnos.length + 1;
+    const esTurnoPar = turnoNum % 2 === 0;
+    let atacante = esTurnoPar ? batalla.personajeB : batalla.personajeA;
+    let defensor = esTurnoPar ? batalla.personajeA : batalla.personajeB;
+
+    let daño = atacante.ataque;
+    let escudoRestante = defensor.escudo;
+    let vidaRestante = defensor.vida;
+
+    if (escudoRestante > 0) {
+      if (daño <= escudoRestante) {
+        escudoRestante -= daño;
+      } else {
+        const dañoRestante = daño - escudoRestante;
+        escudoRestante = 0;
+        vidaRestante = Math.max(0, vidaRestante - dañoRestante);
+      }
+    } else {
+      vidaRestante = Math.max(0, vidaRestante - daño);
+    }
+
+    if (esTurnoPar) {
+      batalla.personajeA.escudo = escudoRestante;
+      batalla.personajeA.vida = vidaRestante;
+    } else {
+      batalla.personajeB.escudo = escudoRestante;
+      batalla.personajeB.vida = vidaRestante;
+    }
+
+    const turno = {
+      numero: turnoNum,
+      atacante: {
+        id: atacante.id,
+        nombre: atacante.nombre
+      },
+      defensor: {
+        id: defensor.id,
+        nombre: defensor.nombre
+      },
+      daño,
+      escudoRestante,
+      vidaRestante
+    };
+
+    batalla.turnos.push(turno);
+
+    let ganador = null;
+    if (vidaRestante <= 0) {
+      batalla.finalizada = true;
+      batalla.ganador = {
+        id: atacante.id,
+        nombre: atacante.nombre
+      };
+      ganador = atacante.nombre;
+    }
+
+    await batalla.save();
+
+    res.status(200).json({
+      mensaje: ganador ? `¡${ganador} ha ganado la batalla!` : 'Turno ejecutado',
+      turno: turno.numero,
+      atacante: {
+        nombre: atacante.nombre
+      },
+      personajeA: batalla.personajeA,
+      personajeB: batalla.personajeB,
+      ganador: ganador || null
+    });
+
+  } catch (error) {
+    res.status(500).json({ mensaje: error.message });
+  }
+};
+
 module.exports = {
   crearOBatallar,
-  resumenBatallas
+  resumenBatallas,
+  ejecutarTurno
 };

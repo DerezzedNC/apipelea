@@ -5,11 +5,28 @@ const crearBatalla1vs1 = async (req, res) => {
   try {
     const { personajeA, personajeB } = req.body;
 
+    if (!personajeA || !personajeB) {
+      return res.status(400).json({ mensaje: 'Debes proporcionar personajeA y personajeB' });
+    }
+
     const atacante = await Personaje.findById(personajeA);
     const defensor = await Personaje.findById(personajeB);
 
     if (!atacante || !defensor) {
       return res.status(404).json({ mensaje: 'Personaje no encontrado' });
+    }
+
+    // Verificar si ya existe una batalla entre estos personajes
+    const batallaExistente = await Batalla.findOne({
+      'personajeA.id': atacante._id,
+      'personajeB.id': defensor._id
+    });
+
+    if (batallaExistente) {
+      return res.status(400).json({ 
+        mensaje: 'Ya existe una batalla entre estos personajes',
+        batallaId: batallaExistente._id
+      });
     }
 
     const nuevoTurno = {
@@ -43,13 +60,15 @@ const crearBatalla1vs1 = async (req, res) => {
         ataque: defensor.ataque
       },
       turnos: [nuevoTurno],
-      ganador: null
+      ganador: null,
+      userId: req.user.id // ✅ Agregar el userId requerido
     });
 
     await nuevaBatalla.save();
 
     res.status(201).json({
       mensaje: 'Batalla creada correctamente',
+      _id: nuevaBatalla._id,
       batalla: {
         personajeA: nuevaBatalla.personajeA,
         personajeB: nuevaBatalla.personajeB,
