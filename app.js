@@ -1,6 +1,5 @@
 const express = require('express');
 const cors = require('cors');
-const path = require('path');
 const swaggerUi = require('swagger-ui-express');
 require('dotenv').config();
 
@@ -23,15 +22,6 @@ app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-// Archivos estáticos (HTML, CSS, JS desde carpeta public/)
-app.use(express.static(path.join(__dirname, 'public')));
-
-// Ruta específica para archivos JavaScript
-app.use('/js', express.static(path.join(__dirname, 'public/js')));
-
-// Ruta específica para archivos CSS
-app.use('/css', express.static(path.join(__dirname, 'public/css')));
-
 // Rutas de API
 app.use('/api/auth', authRoutes);
 app.use('/api/personajes', personajeRoutes);
@@ -42,18 +32,28 @@ app.use('/api/batallas/3vs3', batalla3vs3Routes);
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(specs));
 app.use('/api/docs-json', express.static(path.join(__dirname, 'swagger-output.json')));
 
-// Ruta raíz - redirige a index.html
+// Ruta raíz - información de la API
 app.get('/', (req, res) => {
-  res.sendFile(path.join(__dirname, 'public', 'index.html'));
+  res.json({
+    mensaje: 'API de Batallas - Backend',
+    version: '1.0.0',
+    endpoints: {
+      auth: '/api/auth',
+      personajes: '/api/personajes',
+      batallas: '/api/batallas',
+      batallas3vs3: '/api/batallas/3vs3',
+      swagger: '/api-docs'
+    }
+  });
 });
 
 // Middleware 404 (para rutas que no existen)
 app.use((req, res, next) => {
-  if (req.accepts('html')) {
-    res.status(404).sendFile(path.join(__dirname, 'public', '404.html')); // Opcional: si tienes un 404.html
-  } else {
-    res.status(404).json({ mensaje: 'Ruta no encontrada' });
-  }
+  res.status(404).json({ 
+    mensaje: 'Ruta no encontrada',
+    endpoint: req.originalUrl,
+    metodo: req.method
+  });
 });
 
 // Manejo de errores generales
