@@ -1,119 +1,172 @@
 /* FUENTES Y RESET */
 body {
-    margin: 0;
-    padding: 0;
-    background-color: #001e12;
-    font-family: 'Arial Black', sans-serif;
-    color: #fff;
-  }
-  
-  /* HEADER */
-  header {
-    background-color: #00703c;
-    padding: 20px;
-    text-align: center;
-    color: #f29c1f;
-    font-size: 2em;
-    border-bottom: 4px solid #0aff8a;
-    box-shadow: 0 0 10px #0aff8a;
-  }
-  
-  /* LAYOUT PRINCIPAL */
-  .seleccion-container {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-    padding: 30px;
-    gap: 30px;
-  }
-  
-  /* PANEL DE PERSONAJES */
-  .personajes-panel {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(80px, 1fr));
-    gap: 10px;
-    width: 400px;
-    background-color: #003921;
-    padding: 15px;
-    border: 3px solid #0aff8a;
-    border-radius: 15px;
-    box-shadow: 0 0 20px #00ffcc;
-  }
-  
-  /* CARD DE CADA PERSONAJE */
-  .personaje {
-    background-color: #001e12;
-    border: 2px solid #00ff66;
-    border-radius: 8px;
-    padding: 8px;
-    text-align: center;
-    cursor: pointer;
-    transition: transform 0.2s, box-shadow 0.3s;
-    color: #fff;
-  }
-  
-  .personaje:hover {
-    transform: scale(1.1);
-    box-shadow: 0 0 15px #f29c1f;
-  }
-  
-  .personaje.seleccionado {
-    background-color: #0aff8a;
-    color: #001e12;
-    font-weight: bold;
-  }
-  
-  /* PANEL DE EQUIPOS */
-  .equipos-container {
-    display: flex;
-    flex-direction: column;
-    gap: 20px;
-  }
-  
-  .team {
-    background-color: #001e12;
-    border: 2px solid #f29c1f;
-    border-radius: 12px;
-    padding: 10px 20px;
-    box-shadow: 0 0 10px #f29c1f;
-    width: 300px;
-  }
-  
-  .team h2 {
-    color: #f29c1f;
-    text-align: center;
-  }
-  
-  .team-box {
-    display: flex;
-    justify-content: center;
-    flex-wrap: wrap;
-    gap: 10px;
-    margin-top: 10px;
-  }
-  
-  /* BOTÓN */
-  .botones {
-    text-align: center;
-    margin-top: 30px;
-  }
-  
-  button {
-    background-color: #00703c;
-    color: #fff;
-    font-size: 1.2em;
-    padding: 15px 30px;
-    border: none;
-    border-radius: 10px;
-    cursor: pointer;
-    font-weight: bold;
-    box-shadow: 0 0 10px #0aff8a;
-    transition: background 0.3s, transform 0.2s;
-  }
-  
-  button:hover {
-    background-color: #0aff8a;
-    color: #001e12;
-    transform: scale(1.05);
-  }
-  
+  margin: 0;
+  padding: 0;
+  background-color: #001e12;
+  font-family: 'Arial Black', sans-serif;
+  color: #fff;
+}
+
+/* HEADER */
+header {
+  background-color: #00703c;
+  padding: 20px;
+  text-align: center;
+  color: #f29c1f;
+  font-size: 2em;
+  border-bottom: 4px solid #0aff8a;
+  box-shadow: 0 0 10px #0aff8a;
+}
+
+/* LAYOUT PRINCIPAL */
+.seleccion-container {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  padding: 30px;
+  gap: 30px;
+}
+
+/* PANEL DE PERSONAJES */
+.personajes-panel {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(80px, 1fr));
+  gap: 10px;
+  width: 400px;
+  background-color: #003921;
+  padding: 15px;
+  border: 3px solid #0aff8a;
+  border-radius: 15px;
+  box-shadow: 0 0 20px #00ffcc;
+}
+
+.personaje {
+  background-color: #001e12;
+  border: 2px solid #00ff66;
+  border-radius: 8px;
+  padding: 8px;
+  text-align: center;
+  cursor: pointer;
+  transition: transform 0.2s, box-shadow 0.3s;
+  color: #fff;
+}
+
+.personaje:hover {
+  transform: scale(1.1);
+  box-shadow: 0 0 15px #f29c1f;
+}
+
+.personaje.seleccionado {
+  background-color: #0aff8a;
+  color: #001e12;
+  font-weight: bold;
+}
+
+/* PANEL DE EQUIPOS */
+.equipos-container {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  align-items: center;
+  margin-top: 20px;
+}
+
+.team {
+  background-color: #001e12;
+  border: 2px solid #f29c1f;
+  border-radius: 12px;
+  padding: 10px 20px;
+  box-shadow: 0 0 10px #f29c1f;
+  width: 300px;
+  text-align: center;
+}
+
+.team h2 {
+  color: #f29c1f;
+}
+
+.team-box {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 10px;
+  font-size: 1.1em;
+  color: #0aff8a;
+}
+
+/* BOTONES GENERALES */
+.botones {
+  text-align: center;
+  margin-top: 30px;
+}
+
+button {
+  background-color: #00703c;
+  color: #fff;
+  font-size: 1.2em;
+  padding: 15px 30px;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  font-weight: bold;
+  box-shadow: 0 0 10px #0aff8a;
+  transition: background 0.3s, transform 0.2s;
+}
+
+button:hover {
+  background-color: #0aff8a;
+  color: #001e12;
+  transform: scale(1.05);
+}
+
+/* MODO DE BATALLA */
+.modo-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 40px;
+  padding: 60px;
+  flex-wrap: wrap;
+}
+
+.modo-card {
+  background-color: #003921;
+  color: #f29c1f;
+  border: 3px solid #0aff8a;
+  border-radius: 20px;
+  width: 250px;
+  height: 200px;
+  text-align: center;
+  padding: 20px;
+  cursor: pointer;
+  box-shadow: 0 0 15px #0aff8a;
+  transition: transform 0.3s, box-shadow 0.3s;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.modo-card:hover {
+  transform: scale(1.1);
+  box-shadow: 0 0 25px #f29c1f;
+}
+
+/* RESULTADO DE BATALLA */
+#resultado {
+  text-align: center;
+  margin-top: 30px;
+  background-color: #1a1a1a;
+  border: 2px solid #00ff88;
+  padding: 20px;
+  border-radius: 12px;
+  width: 80%;
+  margin-left: auto;
+  margin-right: auto;
+  color: #fff;
+  box-shadow: 0 0 10px #00ff88;
+}
+
+#resultado h3 {
+  color: #00ff88;
+}

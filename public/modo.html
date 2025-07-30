@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Seleccionar Modo de Batalla</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <header>
+    <h1>🔥 ELIGE TU MODO DE BATALLA 🔥</h1>
+  </header>
+
+  <main class="modo-container">
+    <div class="modo-card" onclick="elegirModo('1vs1')">
+      <h2>1 vs 1</h2>
+      <p>Batalla individual entre dos personajes</p>
+    </div>
+
+    <div class="modo-card" onclick="elegirModo('3vs3')">
+      <h2>3 vs 3</h2>
+      <p>Batalla por equipos de 3 personajes</p>
+    </div>
+  </main>
+
+  <script src="seleccion.js"></script>
+</body>
+</html>
