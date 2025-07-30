@@ -1,6 +1,7 @@
 const express = require('express');
 const cors = require('cors');
 const swaggerUi = require('swagger-ui-express');
+const path = require('path'); // ✅ CORRECCIÓN
 require('dotenv').config();
 
 // Conexión BD y rutas
@@ -32,7 +33,7 @@ app.use('/api/batallas/3vs3', batalla3vs3Routes);
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(specs));
 app.use('/api/docs-json', express.static(path.join(__dirname, 'swagger-output.json')));
 
-// Ruta raíz - información de la API
+// Ruta raíz
 app.get('/', (req, res) => {
   res.json({
     mensaje: 'API de Batallas - Backend',
@@ -47,7 +48,7 @@ app.get('/', (req, res) => {
   });
 });
 
-// Middleware 404 (para rutas que no existen)
+// 404 handler
 app.use((req, res, next) => {
   res.status(404).json({ 
     mensaje: 'Ruta no encontrada',
@@ -56,7 +57,7 @@ app.use((req, res, next) => {
   });
 });
 
-// Manejo de errores generales
+// Error handler
 app.use((err, req, res, next) => {
   console.error('Error interno:', err);
   res.status(500).json({ mensaje: 'Error interno del servidor' });
