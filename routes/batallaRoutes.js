@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const { crearOBatallar, resumenBatallas, ejecutarTurno } = require('../controllers/batallaController');
+const { crearBatalla1vs1 } = require('../controllers/batalla1vs1Controller');
 const authMiddleware = require('../middlewares/authMiddleware');
 const verificarRol = require('../middlewares/verificarRol');
 
@@ -42,7 +43,7 @@ const verificarRol = require('../middlewares/verificarRol');
  *       403:
  *         description: Token inválido
  */
-router.post('/1vs1', authMiddleware, verificarRol(['admin', 'usuario']), crearOBatallar);
+router.post('/1vs1', authMiddleware, verificarRol(['admin', 'usuario']), crearBatalla1vs1);
 
 /**
  * @swagger
